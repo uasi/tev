@@ -1,6 +1,11 @@
 <div class="jumbotron">
   <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
   <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+  <%= if @id_str do %>
+    <p class="lead">Your Twitter id_str is <%= @id_str %>.</p>
+  <% else %>
+    <p class="lead"><a href="/login">Log in</a></p>
+  <% end %>
 </div>
 
 <div class="row marketing">
