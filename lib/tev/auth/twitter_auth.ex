@@ -10,7 +10,7 @@ defmodule Tev.TwitterAuth do
     )
   end
 
-  @spec configure!(String.t, String.t) :: :ok
+  @spec configure!(String.t, String.t) :: ExTwitter.Model.AccessToken.t
   def configure!(oauth_verifier, oauth_token) do
     {:ok, access_token} = ExTwitter.access_token(oauth_verifier, oauth_token)
     ExTwitter.configure(
@@ -20,6 +20,7 @@ defmodule Tev.TwitterAuth do
       access_token: access_token.oauth_token,
       access_token_secret: access_token.oauth_token_secret,
     )
+    access_token
   end
 
   @spec authenticate_url! :: String.t
