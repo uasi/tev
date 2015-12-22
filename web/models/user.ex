@@ -2,7 +2,6 @@ defmodule Tev.User do
   use Tev.Web, :model
 
   alias Tev.AccessToken
-  alias Tev.Crypto
   alias Tev.Repo
 
   schema "users" do
