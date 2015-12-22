@@ -1,6 +1,7 @@
 defmodule Tev.SessionController do
   use Tev.Web, :controller
 
+  alias Tev.Session
   alias Tev.TwitterAuth
   alias Tev.User
 
@@ -16,11 +17,9 @@ defmodule Tev.SessionController do
   """
   def login_callback(conn, %{"oauth_verifier" => verifier, "oauth_token" => token}) do
     user = authenticate_user(verifier, token)
-    conn =
-      conn
-      |> put_session(:user_id, user.id)
-      |> put_session(:twitter_id_str, user.twitter_id_str)
-    redirect conn, to: "/"
+    conn
+    |> Session.sign_in(user)
+    |> redirect(to: "/")
   end
   defp authenticate_user(oauth_verifier, oauth_token) do
     raw_access_token =
@@ -29,5 +28,14 @@ defmodule Tev.SessionController do
     TwitterAuth.authenticated_user!.id_str
     |> User.find_or_create_by_twitter_id_str
     |> User.insert_or_update_twitter_access_token(raw_access_token)
+  end
+
+  @doc """
+  GET /logout
+  """
+  def logout(conn, _params) do
+    conn
+    |> Session.sign_out
+    |> redirect(to: "/")
   end
 end

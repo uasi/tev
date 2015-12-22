@@ -17,9 +17,11 @@ defmodule Tev.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/confidential", PageController, :confidential
 
     get "/login", SessionController, :login
     get "/login/callback", SessionController, :login_callback
+    get "/logout", SessionController, :logout
   end
 
   # Other scopes may use custom stacks.
