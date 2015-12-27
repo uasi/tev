@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export MIX_ENV=${MIX_ENV:-dev}
+PORT=${PORT:-4000}
+SHUTDOWN_TIME_MS=${SHUTDOWN_TIME_MS:-infinity}
+
+NODE=app_$PORT
+HOSTNAME=localhost
+SNAME=$NODE@localhost
+COOKIE=$(cat /dev/urandom | LANG=C tr -dc "0-9A-Za-z" | fold -w 32 | head -n 1)
+
+stop() {
+    echo "Shutting down $SNAME"
+    erl \
+        -sname "shutdown@$HOSTNAME" \
+        -setcookie "$COOKIE" \
+        -noinput \
+        -eval "rpc:call('$SNAME', init, stop, []), init:stop()."
+}
+trap stop SIGINT SIGQUIT SIGTERM
+
+elixir \
+    --sname "$SNAME" \
+    --cookie "$COOKIE" \
+    --erl "-shutdown_time $SHUTDOWN_TIME_MS" \
+    -pa "_build/$MIX_ENV/consolidated" \
+    -S mix phoenix.server "$@" &
+PID=$!
+
+while :; do wait "$PID" 2> /dev/null || break; done
