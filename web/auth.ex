@@ -119,6 +119,8 @@ defmodule Tev.Auth do
     if authorize do
       plug = {:authorize, [], quote(do: var!(action) == unquote(name))}
       Module.put_attribute(env.module, :plugs, plug)
+    end
+    if authorize != default do
       Module.put_attribute(env.module, :authorize, default)
     end
   end
