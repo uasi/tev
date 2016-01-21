@@ -19,7 +19,7 @@ defmodule Tev.Mixfile do
   def application do
     [mod: {Tev, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :mariaex]]
+                    :phoenix_ecto, :poolboy, :postgrex]]
   end
 
   # Specifies which paths to compile per environment.
@@ -35,12 +35,13 @@ defmodule Tev.Mixfile do
       {:credo, "~> 0.2.0", only: [:dev, :test]},
       {:extwitter, "~> 0.6.0"},
       {:gettext, "~> 0.9"},
-      {:mariaex, ">= 0.0.0"},
       {:oauth, github: "tim/erlang-oauth", tag: "v1.5.0", override: true},
       {:phoenix, "~> 1.1.0"},
       {:phoenix_ecto, "~> 2.0"},
       {:phoenix_html, "~> 2.3"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:poolboy, "~> 1.5"},
+      {:postgrex, "~> 0.10.0"},
    ]
   end
 

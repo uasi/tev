@@ -35,8 +35,8 @@ config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
 config :tev, Tev.Repo,
-  adapter: Ecto.Adapters.MySQL,
-  username: "root",
+  adapter: Ecto.Adapters.Postgres,
+  username: "postgres",
   password: "",
   database: "tev_dev",
   hostname: "localhost",

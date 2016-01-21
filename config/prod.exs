@@ -22,6 +22,6 @@ config :tev, Tev.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 config :tev, Tev.Repo,
-  adapter: Ecto.Adapters.MySQL,
+  adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   pool_size: 20

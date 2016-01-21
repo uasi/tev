@@ -11,7 +11,7 @@ config :logger, level: :warn
 
 # Configure your database
 config :tev, Tev.Repo,
-  adapter: Ecto.Adapters.MySQL,
+  adapter: Ecto.Adapters.Postgres,
   username: "root",
   password: "",
   database: "tev_test",
