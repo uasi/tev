@@ -21,12 +21,13 @@ defmodule Tev.SessionController do
     |> Session.sign_in(user)
     |> redirect(to: "/")
   end
+
   defp authenticate_user(oauth_verifier, oauth_token) do
     raw_access_token =
       TwitterAuth.configure!(oauth_verifier, oauth_token)
       |> Map.take([:oauth_token, :oauth_token_secret])
-    TwitterAuth.authenticated_user!.id_str
-    |> User.find_or_create_by_twitter_id_str
+    TwitterAuth.authenticated_user!
+    |> User.from_user_object
     |> User.insert_or_update_twitter_access_token(raw_access_token)
   end
 

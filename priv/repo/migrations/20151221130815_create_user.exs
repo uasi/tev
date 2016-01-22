@@ -2,13 +2,11 @@ defmodule Tev.Repo.Migrations.CreateUser do
   use Ecto.Migration
 
   def change do
-    create table(:users) do
-      add :twitter_id_str, :string
-      add :twitter_screen_name, :string
+    create table(:users, primary_key: false) do
+      add :id, :integer, null: false, primary_key: true
+      add :screen_name, :string, null: false
 
       timestamps
     end
-    create unique_index(:users, [:twitter_id_str])
-
   end
 end

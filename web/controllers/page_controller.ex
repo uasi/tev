@@ -4,8 +4,8 @@ defmodule Tev.PageController do
   use Tev.Auth, :current_user
 
   def index(conn, _params, user) do
-    id_str = if user, do: user.twitter_id_str, else: nil
-    render conn, "index.html", id_str: id_str
+    user_id = if user, do: user.id, else: nil
+    render conn, "index.html", user_id: user_id
   end
 
   @authorize true

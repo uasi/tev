@@ -3,7 +3,7 @@ defmodule Tev.UserTest do
 
   alias Tev.User
 
-  @valid_attrs %{twitter_id_str: "some content"}
+  @valid_attrs %{screen_name: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
@@ -14,9 +14,5 @@ defmodule Tev.UserTest do
   test "changeset with invalid attributes" do
     changeset = User.changeset(%User{}, @invalid_attrs)
     refute changeset.valid?
-  end
-
-  test "put_access_token" do
-
   end
 end
