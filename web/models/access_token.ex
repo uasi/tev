@@ -28,6 +28,8 @@ defmodule Tev.AccessToken do
     params = encrypt_params(params)
     model
     |> cast(params, @required_fields, @optional_fields)
+    |> assoc_constraint(:user)
+    |> unique_constraint(:user_id)
   end
 
   def decrypt(model) do
