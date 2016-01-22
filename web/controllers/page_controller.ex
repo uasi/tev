@@ -12,4 +12,10 @@ defmodule Tev.PageController do
   def confidential(conn, _params, _user) do
     text conn, "ok"
   end
+
+  @authorize true
+  def fetch(conn, _params, user) do
+    Tev.Tw.Dispatcher.dispatch(user)
+    text conn, "ok"
+  end
 end
