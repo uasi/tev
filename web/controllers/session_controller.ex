@@ -28,7 +28,7 @@ defmodule Tev.SessionController do
       |> Map.take([:oauth_token, :oauth_token_secret])
     TwitterAuth.authenticated_user!
     |> User.from_user_object
-    |> User.insert_or_update_twitter_access_token(raw_access_token)
+    |> User.insert_or_update_access_token(raw_access_token)
   end
 
   @doc """

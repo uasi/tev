@@ -8,7 +8,7 @@ defmodule Tev.User do
 
   schema "users" do
     field :screen_name, :string
-    has_one :twitter_access_token, AccessToken
+    has_one :access_token, AccessToken
 
     timestamps
   end
@@ -30,14 +30,14 @@ defmodule Tev.User do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> cast_assoc(:twitter_access_token)
+    |> cast_assoc(:access_token)
   end
 
   @spec from_user_object(ExTwitter.Model.User.t) :: t
   def from_user_object(user) do
     query = from u in __MODULE__,
       where: u.id == ^user.id,
-      preload: [:twitter_access_token]
+      preload: [:access_token]
     Repo.one(query) || insert(user)
   end
 
@@ -47,18 +47,18 @@ defmodule Tev.User do
   end
 
   @doc """
-  Inserts or updates `twitter_access_token` assoc with given credentials and (re)preloads it.
+  Inserts or updates `access_token` assoc with given credentials and (re)preloads it.
 
   Raises `Ecto.InvalidChangesetError` if `user` is not persisted.
   """
-  @spec insert_or_update_twitter_access_token(t, %{}) :: t
-  def insert_or_update_twitter_access_token(user, params = %{oauth_token: _, oauth_token_secret: _}) do
-    user = Repo.preload(user, [:twitter_access_token])
-    current_token = (user.twitter_access_token || build_assoc(user, :twitter_access_token))
+  @spec insert_or_update_access_token(t, %{}) :: t
+  def insert_or_update_access_token(user, params = %{oauth_token: _, oauth_token_secret: _}) do
+    user = Repo.preload(user, [:access_token])
+    current_token = (user.access_token || build_assoc(user, :access_token))
     new_token =
       current_token
       |> AccessToken.changeset(params)
       |> Repo.insert_or_update!
-    %{user | twitter_access_token: new_token}
+    %{user | access_token: new_token}
   end
 end
