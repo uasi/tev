@@ -2,6 +2,7 @@ defmodule Tev.User do
   use Tev.Web, :model
 
   alias Tev.AccessToken
+  alias Tev.HomeTimeline
   alias Tev.Repo
 
   @primary_key {:id, :integer, autogenerate: false}
@@ -9,6 +10,7 @@ defmodule Tev.User do
   schema "users" do
     field :screen_name, :string
     has_one :access_token, AccessToken
+    has_one :home_timeline, HomeTimeline
 
     timestamps
   end
