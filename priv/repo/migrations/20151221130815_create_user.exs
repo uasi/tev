@@ -3,7 +3,7 @@ defmodule Tev.Repo.Migrations.CreateUser do
 
   def change do
     create table(:users, primary_key: false) do
-      add :id, :integer, null: false, primary_key: true
+      add :id, :bigint, null: false, primary_key: true
       add :screen_name, :string, null: false
 
       timestamps
