@@ -13,6 +13,7 @@ defmodule Tev do
     children = [
       supervisor(Tev.Endpoint, []),
       supervisor(Tev.Repo, []),
+      worker(Tev.Tw.Collector, []),
       Tev.Tw.Dispatcher.pool_spec,
       Tev.Tw.Fetcher.pool_spec,
     ]

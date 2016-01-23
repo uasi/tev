@@ -7,6 +7,7 @@ defmodule Tev.Tw.Fetcher.Worker do
 
   alias Tev.AccessToken
   alias Tev.Repo
+  alias Tev.Tw.Collector
   alias Tev.Tw.TimelineStream
 
   def start_link([]) do
@@ -36,11 +37,11 @@ defmodule Tev.Tw.Fetcher.Worker do
     elapsed = :erlang.monotonic_time(:milli_seconds) - t
 
     case result do
+      {:ok, []} ->
+        Logger.info("#{__MODULE__} #{inspect self}: fetched tweets; user_id=#{user_id} since_id=#{since_id} elapsed=#{elapsed}ms")
       {:ok, tweets} ->
         Logger.info("#{__MODULE__} #{inspect self}: fetched tweets; user_id=#{user_id} since_id=#{since_id} elapsed=#{elapsed}ms")
-        # TODO: collect
-        Logger.info("fetched #{length tweets} tweets")
-
+        Collector.collect(timeline, tweets)
       {:error, e} ->
         Logger.warn("#{__MODULE__} #{inspect self}: failed to fetch tweets; error=#{inspect e} elapsed=#{elapsed}ms")
     end

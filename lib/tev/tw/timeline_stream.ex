@@ -11,10 +11,9 @@ defmodule Tev.Tw.TimelineStream do
   Tweets are sorted by newest first order in almost all cases, though not
   guaranteed.
 
-  When it reaches the rate limit, the stream terminates emitting
-  `{:rate_limit_exceeded, %ExTwitter.RateLimitExceededError{...}}`
+  Raises `ExTwitter.RateLimitExceededError` if it reaches the rate limit.
 
-  Raises `ExTwitter.Error` for Twitter API-related error.
+  Raises `ExTwitter.Error` for other Twitter API-related errors.
   """
   @spec home_timeline(integer, max_id: integer, since_id: integer)
         :: [ExTwitter.Model.Tweet.t | rate_limit_marker] | no_return
@@ -39,11 +38,11 @@ defmodule Tev.Tw.TimelineStream do
   end
 
   @spec get_max_id_or_default([ExTwitter.Model.Tweet.t], integer) :: integer
-  defp get_max_id_or_default(tweets, default) when tweets in [nil, []] do
-    default
-  end
-  defp get_max_id_or_default(tweets, _default) do
+  defp get_max_id_or_default(tweets = [_|_], _default) do
     List.last(tweets).id - 1
+  end
+  defp get_max_id_or_default(_tweets, default) do
+    default
   end
 
   @spec get_tweets(list_id: integer, max_id: integer, since_id: integer)
