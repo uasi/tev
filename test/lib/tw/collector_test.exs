@@ -4,6 +4,7 @@ defmodule Tev.Tw.CollectorTest do
   import Ecto.Query, only: [from: 2]
   import Tev.Factory
 
+  alias Tev.HomeTimelineTweet
   alias Tev.Repo
   alias Tev.Tw.Collector
   alias Tev.Tweet
@@ -35,14 +36,22 @@ defmodule Tev.Tw.CollectorTest do
   end
 
   test "collector deals with duplicate photo tweets" do
-    photo_tweets = build_many(:extwitter_photo_tweet, 5)
-    photo_tweets_1 = Enum.take(photo_tweets, length(photo_tweets) - 1)
-    photo_tweets_2 = Enum.drop(photo_tweets, 1)
+    all_tweets = build_many(:extwitter_photo_tweet, 6)
+    [tweets1, overlap, tweets2] = Enum.chunk(all_tweets, 2)
     timeline = create(:home_timeline, user_id: create(:user).id)
 
-    :ok = GenServer.call(Collector, {:collect, timeline, photo_tweets_1})
-    :ok = GenServer.call(Collector, {:collect, timeline, photo_tweets_2})
+    :ok = GenServer.call(Collector, {:collect, timeline, tweets1 ++ overlap})
+    :ok = GenServer.call(Collector, {:collect, timeline, overlap ++ tweets2})
 
-    assert count_inserted(photo_tweets) == length(photo_tweets)
+    assert count_inserted(all_tweets) == length(all_tweets)
+
+    ids = Enum.map(all_tweets, &Map.get(&1, :id))
+    timeline_count =
+      from(t in HomeTimelineTweet,
+        select: count(t.id),
+        where: t.tweet_id in ^ids)
+      |> Repo.one
+
+    assert timeline_count == length(all_tweets) + length(overlap)
   end
 end

@@ -57,11 +57,13 @@ defmodule Tev.Tw.Collector do
   defp insert_tweets(tweets, timeline, max_id) do
     Logger.info("#{__MODULE__} #{inspect self}: inserting tweets; n=#{length tweets}")
     Repo.transaction fn ->
-      for tweet <- tweets, Repo.get(Tweet, tweet.id, log: false) == nil do
-        tweet_object = Map.delete(tweet, :__struct__)
-        %Tweet{id: tweet.id, object: tweet_object}
-        |> Tweet.changeset(%{})
-        |> Repo.insert!
+      for tweet <- tweets do
+        unless Repo.get(Tweet, tweet.id, log: false) do
+          tweet_object = Map.delete(tweet, :__struct__)
+          %Tweet{id: tweet.id, object: tweet_object}
+          |> Tweet.changeset(%{})
+          |> Repo.insert!
+        end
 
         %HomeTimelineTweet{home_timeline_id: timeline.id, tweet_id: tweet.id}
         |> HomeTimelineTweet.changeset(%{})
