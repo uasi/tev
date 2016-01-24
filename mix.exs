@@ -33,7 +33,7 @@ defmodule Tev.Mixfile do
     [
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.2.0", only: [:dev, :test]},
-      {:extwitter, "~> 0.6.0"},
+      {:extwitter, github: "uasi/extwitter", branch: "tweet-extended-entities"},
       {:gettext, "~> 0.9"},
       {:oauth, github: "tim/erlang-oauth", tag: "v1.5.0", override: true},
       {:phoenix, "~> 1.1.0"},
