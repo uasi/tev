@@ -5,7 +5,7 @@ defmodule Tev.AccessTokenTest do
   alias Tev.User
 
   test "encrypt and decrypt" do
-    %{id: user_id} = Repo.insert!(%User{})
+    %{id: user_id} = Repo.insert!(%User{id: 1, screen_name: "foo"})
     attrs = %{oauth_token: "TOKEN", oauth_token_secret: "TOKEN_SECRET", user_id: user_id}
     %{id: id} =
       %AccessToken{}
