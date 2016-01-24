@@ -14,6 +14,14 @@ defmodule Tev.Tw.CollectorTest do
     |> Enum.to_list
   end
 
+  defp count_inserted(tweets) do
+    ids = Enum.map(tweets, &Map.get(&1, :id))
+    from(t in Tweet,
+      select: count(t.id),
+      where: t.id in ^ids)
+    |> Repo.one
+  end
+
   test "collector inserts photo tweets" do
     normal_tweets = build_many(:extwitter_tweet, 3)
     photo_tweets = build_many(:extwitter_photo_tweet, 3)
@@ -22,15 +30,19 @@ defmodule Tev.Tw.CollectorTest do
 
     :ok = GenServer.call(Collector, {:collect, timeline, tweets})
 
-    count_inserted = fn tweets ->
-      ids = Enum.map(tweets, &Map.get(&1, :id))
-      from(t in Tweet,
-        select: count(t.id),
-        where: t.id in ^ids)
-      |> Repo.one
-    end
+    assert count_inserted(normal_tweets) == 0
+    assert count_inserted(photo_tweets) == length(photo_tweets)
+  end
 
-    assert count_inserted.(normal_tweets) == 0
-    assert count_inserted.(photo_tweets) == length(photo_tweets)
+  test "collector deals with duplicate photo tweets" do
+    photo_tweets = build_many(:extwitter_photo_tweet, 5)
+    photo_tweets_1 = Enum.take(photo_tweets, length(photo_tweets) - 1)
+    photo_tweets_2 = Enum.drop(photo_tweets, 1)
+    timeline = create(:home_timeline, user_id: create(:user).id)
+
+    :ok = GenServer.call(Collector, {:collect, timeline, photo_tweets_1})
+    :ok = GenServer.call(Collector, {:collect, timeline, photo_tweets_2})
+
+    assert count_inserted(photo_tweets) == length(photo_tweets)
   end
 end

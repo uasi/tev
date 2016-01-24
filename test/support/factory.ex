@@ -13,7 +13,6 @@ defmodule Tev.Factory do
 
   def factory(:home_timeline) do
     %HomeTimeline{
-      id: sequence(:home_timeline_id, &(&1)),
       user_id: sequence(:user_id, &(&1)),
     }
   end
