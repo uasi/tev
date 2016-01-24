@@ -19,8 +19,10 @@ defmodule Tev.Mixfile do
   def application do
     [mod: {Tev, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :poolboy, :postgrex]]
+                    :phoenix_ecto, :poolboy, :postgrex] ++ application(Mix.env)]
   end
+  def application(:test), do: [:ex_machina]
+  def application(_),     do: []
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
@@ -33,6 +35,7 @@ defmodule Tev.Mixfile do
     [
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.2.0", only: [:dev, :test]},
+      {:ex_machina, "~> 0.6.1", only: [:test]},
       {:extwitter, github: "uasi/extwitter", branch: "tweet-extended-entities"},
       {:gettext, "~> 0.9"},
       {:oauth, github: "tim/erlang-oauth", tag: "v1.5.0", override: true},
