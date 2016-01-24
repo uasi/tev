@@ -26,15 +26,25 @@ defmodule Tev.Tw.Collector do
     GenServer.cast(__MODULE__, {:collect, timeline, tweets})
   end
 
-  def handle_cast({:collect, _timeline, []}, _state) do
+  def handle_cast({:collect, timeline, tweets}, _state) do
+    do_collect(timeline, tweets)
+    {:noreply, nil}
+  end
+
+  # For testing
+  def handle_call({:collect, timeline, tweets}, _from, _state) do
+    do_collect(timeline, tweets)
+    {:reply, :ok, nil}
+  end
+
+  defp do_collect(_timeline, []) do
     Logger.info("#{__MODULE__} #{inspect self}: no tweets, do nothing")
   end
-  def handle_cast({:collect, timeline, tweets}, _state) do
+  defp do_collect(timeline, tweets) do
     max_id = List.first(tweets).id
     tweets
     |> Enum.filter(&photo_tweet?/1)
     |> insert_tweets(timeline, max_id)
-    {:noreply, nil}
   end
 
   defp photo_tweet?(%{extended_entities: %{media: media = [_|_]}}) do
