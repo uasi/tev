@@ -41,10 +41,20 @@ defmodule Tev.Tw.Collector do
     Logger.info("#{__MODULE__} #{inspect self}: no tweets, do nothing")
   end
   defp do_collect(timeline, tweets) do
-    max_id = List.first(tweets).id
-    tweets
-    |> Enum.filter(&photo_tweet?/1)
-    |> insert_tweets(timeline, max_id)
+    Repo.transaction fn ->
+      if max_id_changed?(timeline) do
+        Logger.info("#{__MODULE__} #{inspect self}: timeline has changed since fetch requested; discarding fetched tweets")
+      else
+        max_id = List.first(tweets).id
+        tweets
+        |> Enum.filter(&photo_tweet?/1)
+        |> insert_tweets(timeline, max_id)
+      end
+    end
+  end
+
+  def max_id_changed?(timeline) do
+    Repo.reload(timeline).max_tweet_id != timeline.max_tweet_id
   end
 
   defp photo_tweet?(%{extended_entities: %{media: media = [_|_]}}) do

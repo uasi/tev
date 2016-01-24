@@ -28,7 +28,6 @@ defmodule Tev.Tw.CollectorTest do
     photo_tweets = build_many(:extwitter_photo_tweet, 3)
     tweets = Enum.shuffle(normal_tweets ++ photo_tweets)
     timeline = create(:home_timeline, user_id: create(:user).id)
-
     :ok = GenServer.call(Collector, {:collect, timeline, tweets})
 
     assert count_inserted(normal_tweets) == 0
@@ -39,8 +38,9 @@ defmodule Tev.Tw.CollectorTest do
     all_tweets = build_many(:extwitter_photo_tweet, 6)
     [tweets1, overlap, tweets2] = Enum.chunk(all_tweets, 2)
     timeline = create(:home_timeline, user_id: create(:user).id)
-
     :ok = GenServer.call(Collector, {:collect, timeline, tweets1 ++ overlap})
+
+    timeline = Repo.reload(timeline)
     :ok = GenServer.call(Collector, {:collect, timeline, overlap ++ tweets2})
 
     assert count_inserted(all_tweets) == length(all_tweets)
@@ -53,5 +53,18 @@ defmodule Tev.Tw.CollectorTest do
       |> Repo.one
 
     assert timeline_count == length(all_tweets) + length(overlap)
+  end
+
+  test "collector discards tweets if timeline has changed since fetch requested" do
+    tweets1 = build_many(:extwitter_photo_tweet, 3)
+    tweets2 = build_many(:extwitter_photo_tweet, 3)
+    timeline = create(:home_timeline, user_id: create(:user).id)
+    :ok = GenServer.call(Collector, {:collect, timeline, tweets1})
+
+    # Start collector with outdated timeline.
+    :ok = GenServer.call(Collector, {:collect, timeline, tweets2})
+
+    assert count_inserted(tweets1) == length(tweets1)
+    assert count_inserted(tweets2) == 0
   end
 end
