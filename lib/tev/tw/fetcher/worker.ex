@@ -37,11 +37,11 @@ defmodule Tev.Tw.Fetcher.Worker do
     elapsed = :erlang.monotonic_time(:milli_seconds) - t
 
     case result do
-      {:ok, []} ->
-        Logger.info("#{__MODULE__} #{inspect self}: fetched tweets; user_id=#{user_id} since_id=#{since_id} elapsed=#{elapsed}ms")
       {:ok, tweets} ->
-        Logger.info("#{__MODULE__} #{inspect self}: fetched tweets; user_id=#{user_id} since_id=#{since_id} elapsed=#{elapsed}ms")
-        Collector.collect(timeline, tweets)
+        Logger.info("#{__MODULE__} #{inspect self}: fetched tweets; n=#{length tweets} elapsed=#{elapsed}ms")
+        if length(tweets) > 0 do
+          Collector.collect(timeline, tweets)
+        end
       {:error, e} ->
         Logger.warn("#{__MODULE__} #{inspect self}: failed to fetch tweets; error=#{inspect e} elapsed=#{elapsed}ms")
     end
