@@ -3,9 +3,13 @@ defmodule Tev.PageController do
   use Tev.Auth, authorize: false
   use Tev.Auth, :current_user
 
+  alias Tev.PageView
+
+  def index(conn, _params, nil) do
+    render conn, "index.html", view: nil
+  end
   def index(conn, _params, user) do
-    user_id = if user, do: user.id, else: nil
-    render conn, "index.html", user_id: user_id
+    render conn, "index.html", view: PageView.new(user)
   end
 
   @authorize true
