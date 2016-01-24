@@ -9,7 +9,7 @@ defmodule Tev.Tw.Fetcher do
 
   # Note: Each worker makes one to about ten API calls, depending how many
   # tweets are available in the given timeline.
-  @timeout_ms 60_000
+  @timeout_ms 120_000
   @pool_size 5
   @max_overflow 1
 

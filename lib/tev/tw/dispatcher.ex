@@ -3,6 +3,9 @@ defmodule Tev.Tw.Dispatcher do
   Dispatches fetch request to fetcher.
   """
 
+  require Logger
+
+  alias Tev.Repo
   alias Tev.Tw.Dispatcher.Worker
   alias Tev.User
 
@@ -10,20 +13,36 @@ defmodule Tev.Tw.Dispatcher do
   @pool_size 5
   @max_overflow 1
 
-  require Logger
+  @doc """
+  Dispatches fetch requests for all users to fetcher.
+  """
+  @spec dispatch_all :: :ok
+  def dispatch_all do
+    Logger.info("#{__MODULE__}: dispatch all")
+    spawn fn ->
+      Repo.all(User)
+      |> Enum.map(&run_pooled_worker/1)
+    end
+    :ok
+  end
+
   @doc """
   Dispatches fetch request to fetcher.
   """
   @spec dispatch(User.t) :: :ok
   def dispatch(user) do
     spawn fn ->
-      :poolboy.transaction(
-        pool_name,
-        fn(pid) -> Worker.run(pid, user) end,
-        @timeout
-      )
+      run_pooled_worker(user)
     end
     :ok
+  end
+
+  defp run_pooled_worker(user) do
+    :poolboy.transaction(
+      pool_name,
+      fn(pid) -> Worker.run(pid, user) end,
+      @timeout
+    )
   end
 
   @doc """
