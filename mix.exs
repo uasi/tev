@@ -47,6 +47,7 @@ defmodule Tev.Mixfile do
       {:poolboy, "~> 1.5"},
       {:postgrex, "~> 0.10.0"},
       {:quantum, "~> 1.6"},
+      {:scrivener, "~> 1.1"},
    ]
   end
 

@@ -1,5 +1,5 @@
 defmodule Tev.PageView do
-  defstruct [:user, :photo_urls]
+  defstruct [:user, :page]
   @type t :: %__MODULE__{}
 
   use Tev.Web, :view
@@ -11,21 +11,20 @@ defmodule Tev.PageView do
   alias Tev.Tweet
   alias Tev.User
 
-  @spec new(User.t) :: t
-  def new(user) do
-    photo_urls =
+  @spec new(%{}, User.t) :: t
+  def new(params, user) do
+    page =
       user
       |> assoc(:home_timeline)
       |> Repo.one!
       |> assoc(:tweets)
       |> order_by(desc: :id)
-      |> Repo.all
-      |> to_photo_urls
-    %__MODULE__{user: user, photo_urls: photo_urls}
+      |> Repo.paginate(params)
+    %__MODULE__{user: user, page: page}
   end
 
-  @spec to_photo_urls([Tweet.t]) :: [binary]
-  defp to_photo_urls(tweets) do
+  @spec tweets_to_photo_urls([Tweet.t]) :: [binary]
+  defp tweets_to_photo_urls(tweets) do
     tweets
     |> Stream.map(&photo_urls_in_tweet/1)
     |> Stream.concat

@@ -12,12 +12,27 @@
 <div class="row marketing">
   <%= if @view do %>
   <div class="col-lg-6">
-    <h4>Photo URLs (n = <%= length @view.photo_urls %>)</h4>
+  <h4>
+    Photo URLs (n = <%= @view.page.total_entries %>,
+    page = <%= @view.page.page_number %> of <%= @view.page.total_pages %>)
+  </h4>
     <ul>
-      <%= for photo_url <- @view.photo_urls do %>
+      <%= for photo_url <- tweets_to_photo_urls(@view.page.entries) do %>
       <li><a href="<%= photo_url %>" target="_blank"><%= photo_url %></li>
       <% end %>
     </ul>
   </div>
+  <%= if @view.page.total_pages > 1 do %>
+  <div class="col-lg-6">
+    <a href="./">first</a>
+    <%= if @view.page.page_number > 1 do %>
+      <a href="?page=<%= @view.page.page_number - 1 %>">prev</a>
+    <% end %>
+    <%= if @view.page.page_number < @view.page.total_pages do %>
+      <a href="?page=<%= @view.page.page_number + 1 %>">next</a>
+    <% end %>
+    <a href="?page=<%= @view.page.total_pages %>">last</a>
+  </div>
+  <% end %>
   <% end %>
 </div>

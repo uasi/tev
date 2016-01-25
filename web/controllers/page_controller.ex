@@ -8,8 +8,8 @@ defmodule Tev.PageController do
   def index(conn, _params, nil) do
     render conn, "index.html", view: nil
   end
-  def index(conn, _params, user) do
-    render conn, "index.html", view: PageView.new(user)
+  def index(conn, params, user) do
+    render conn, "index.html", view: PageView.new(params, user)
   end
 
   @authorize true
