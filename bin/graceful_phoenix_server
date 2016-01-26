@@ -27,4 +27,4 @@ elixir \
     -S mix phoenix.server "$@" &
 PID=$!
 
-while :; do wait "$PID" 2> /dev/null || break; done
+while kill -0 "$PID" 2>/dev/null; do wait "$PID"; done
