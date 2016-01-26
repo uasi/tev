@@ -7,6 +7,7 @@ defmodule Tev.Tw.Fetcher.Worker do
 
   alias Tev.AccessToken
   alias Tev.Repo
+  alias Tev.TickTock
   alias Tev.Tw.Collector
   alias Tev.Tw.TimelineStream
   alias Tev.User
@@ -38,9 +39,9 @@ defmodule Tev.Tw.Fetcher.Worker do
     user_id = user.id
     since_id = timeline.max_tweet_id
     Logger.info("#{__MODULE__} #{inspect self}: fetching tweets; user_id=#{user_id} since_id=#{since_id}")
-    t = :erlang.monotonic_time(:milli_seconds)
+    TickTock.tick
     result = fetch_all_tweets(user_id, since_id)
-    elapsed = :erlang.monotonic_time(:milli_seconds) - t
+    elapsed = TickTock.tock
 
     case result do
       {:ok, tweets} ->
