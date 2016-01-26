@@ -9,9 +9,9 @@ defmodule Tev.Tw.Dispatcher do
   alias Tev.Tw.Dispatcher.Worker
   alias Tev.User
 
-  @timeout 10_000
-  @pool_size 5
-  @max_overflow 1
+  @timeout_ms Application.get_env(:tev, __MODULE__)[:timeout_ms]
+  @pool_size Application.get_env(:tev, __MODULE__)[:pool_size]
+  @max_overflow Application.get_env(:tev, __MODULE__)[:max_overflow]
 
   @doc """
   Dispatches fetch requests for all users to fetcher.
@@ -41,7 +41,7 @@ defmodule Tev.Tw.Dispatcher do
     :poolboy.transaction(
       pool_name,
       fn(pid) -> Worker.run(pid, user) end,
-      @timeout
+      @timeout_ms
     )
   end
 

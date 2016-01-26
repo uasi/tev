@@ -7,11 +7,9 @@ defmodule Tev.Tw.Fetcher do
   alias Tev.Tw.Fetcher.Worker
   alias Tev.User
 
-  # Note: Each worker makes one to about ten API calls, depending how many
-  # tweets are available in the given timeline.
-  @timeout_ms 120_000
-  @pool_size 5
-  @max_overflow 1
+  @timeout_ms Application.get_env(:tev, __MODULE__)[:timeout_ms]
+  @pool_size Application.get_env(:tev, __MODULE__)[:pool_size]
+  @max_overflow Application.get_env(:tev, __MODULE__)[:max_overflow]
 
   @doc """
   Fetches all available tweets in a timeline and pass them to the collector.

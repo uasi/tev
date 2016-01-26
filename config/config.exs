@@ -8,6 +8,18 @@ use Mix.Config
 config :tev,
   max_timeline_tweets: 1000
 
+config :tev, Tev.Tw.Dispatcher,
+  timeout_ms: 10_000,
+  pool_size: 5,
+  max_overflow: 1
+
+# Note: Each worker makes one to about ten API calls, depending how many tweets
+# are available in a timeline.
+config :tev, Tev.Tw.Fetcher,
+  timeout_ms: 120_000,
+  pool_size: 5,
+  max_overflow: 1
+
 # Configures the endpoint
 config :tev, Tev.Endpoint,
   url: [host: "localhost"],
