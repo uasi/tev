@@ -18,7 +18,7 @@
   </h4>
     <ul>
       <%= for photo_url <- tweets_to_photo_urls(@view.page.entries) do %>
-      <li><a href="<%= photo_url %>" target="_blank"><%= photo_url %></li>
+        <li><a href="<%= photo_url <> ":orig" %>" target="_blank"><img src="<%= photo_url <> ":thumb" %>"></a></li>
       <% end %>
     </ul>
   </div>
