@@ -12,7 +12,7 @@ config :logger, level: :warn
 # Configure your database
 config :tev, Tev.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "root",
+  username: "postgres",
   password: "",
   database: "tev_test",
   hostname: "localhost",

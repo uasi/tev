@@ -2,13 +2,16 @@ defmodule Tev.User do
   use Tev.Web, :model
 
   alias Tev.AccessToken
+  alias Tev.HomeTimeline
   alias Tev.Repo
 
   @primary_key {:id, :integer, autogenerate: false}
 
   schema "users" do
     field :screen_name, :string
+    field :last_fetch_started_at, Ecto.DateTime
     has_one :access_token, AccessToken
+    has_one :home_timeline, HomeTimeline
 
     timestamps
   end
@@ -19,6 +22,7 @@ defmodule Tev.User do
     screen_name
   )
   @optional_fields ~w(
+    last_fetch_started_at
   )
 
   @doc """

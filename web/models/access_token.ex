@@ -2,6 +2,7 @@ defmodule Tev.AccessToken do
   use Tev.Web, :model
 
   alias Tev.Crypto
+  alias Tev.Env
   alias Tev.User
 
   schema "access_tokens" do
@@ -52,5 +53,21 @@ defmodule Tev.AccessToken do
       end)
       |> Enum.into(%{})
     Map.merge(params, encrypted_params)
+  end
+
+  @doc """
+  Configures ExTwitter with token and secret.
+
+  Configuration is isolated for each process.
+  """
+  def configure_twitter_client(model) do
+    model = decrypt(model)
+    ExTwitter.configure(
+      :process,
+      consumer_key: Env.twitter_api_key!,
+      consumer_secret: Env.twitter_api_secret!,
+      access_token: model.oauth_token,
+      access_token_secret: model.oauth_token_secret
+    )
   end
 end

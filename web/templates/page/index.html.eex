@@ -1,41 +1,38 @@
 <div class="jumbotron">
   <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
   <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
-  <%= if @user_id do %>
-    <p class="lead">Your Twitter ID is <%= @user_id %>.</p>
+  <%= if @view do %>
+    <p class="lead">Your Twitter ID is <%= @view.user.id %>.</p>
   <% else %>
     <p class="lead"><a href="/login">Log in</a></p>
   <% end %>
 </div>
 
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4>Resources</h4>
-    <ul>
-      <li>
-        <a href="http://phoenixframework.org/docs/overview">Guides</a>
-      </li>
-      <li>
-        <a href="http://hexdocs.pm/phoenix">Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-    </ul>
-  </div>
 
+<div class="row marketing">
+  <%= if @view do %>
   <div class="col-lg-6">
-    <h4>Help</h4>
+  <h4>
+    Photo URLs (n = <%= @view.page.total_entries %>,
+    page = <%= @view.page.page_number %> of <%= @view.page.total_pages %>)
+  </h4>
     <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
+      <%= for photo_url <- tweets_to_photo_urls(@view.page.entries) do %>
+      <li><a href="<%= photo_url %>" target="_blank"><%= photo_url %></li>
+      <% end %>
     </ul>
   </div>
+  <%= if @view.page.total_pages > 1 do %>
+  <div class="col-lg-6">
+    <a href="./">first</a>
+    <%= if @view.page.page_number > 1 do %>
+      <a href="?page=<%= @view.page.page_number - 1 %>">prev</a>
+    <% end %>
+    <%= if @view.page.page_number < @view.page.total_pages do %>
+      <a href="?page=<%= @view.page.page_number + 1 %>">next</a>
+    <% end %>
+    <a href="?page=<%= @view.page.total_pages %>">last</a>
+  </div>
+  <% end %>
+  <% end %>
 </div>

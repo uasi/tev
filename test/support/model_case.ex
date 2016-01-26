@@ -17,8 +17,9 @@ defmodule Tev.ModelCase do
   using do
     quote do
       alias Tev.Repo
-      import Ecto.Model
+      import Ecto.Model, except: [build: 2]
       import Ecto.Query, only: [from: 2]
+      import Tev.Factory
       import Tev.ModelCase
     end
   end

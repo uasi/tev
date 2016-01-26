@@ -18,6 +18,7 @@ defmodule Tev.Router do
 
     get "/", PageController, :index
     get "/confidential", PageController, :confidential
+    get "/fetch", PageController, :fetch
 
     get "/login", SessionController, :login
     get "/login/callback", SessionController, :login_callback

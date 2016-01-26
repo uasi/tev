@@ -2,10 +2,9 @@ defmodule Tev.AccessTokenTest do
   use Tev.ModelCase
 
   alias Tev.AccessToken
-  alias Tev.User
 
   test "encrypt and decrypt" do
-    %{id: user_id} = Repo.insert!(%User{})
+    %{id: user_id} = create(:user)
     attrs = %{oauth_token: "TOKEN", oauth_token_secret: "TOKEN_SECRET", user_id: user_id}
     %{id: id} =
       %AccessToken{}
