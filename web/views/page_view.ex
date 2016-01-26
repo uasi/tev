@@ -7,6 +7,7 @@ defmodule Tev.PageView do
   import Ecto, only: [assoc: 2]
   import Ecto.Query
 
+  alias Tev.HomeTimelineTweet
   alias Tev.Repo
   alias Tev.Tweet
   alias Tev.User
@@ -17,11 +18,18 @@ defmodule Tev.PageView do
       user
       |> assoc(:home_timeline)
       |> Repo.one!
-      |> assoc(:tweets)
-      |> order_by(desc: :updated_at)
+      |> tweets_in_timeline
       |> limit(^Application.get_env(:tev, :max_timeline_tweets))
       |> Repo.paginate(params)
     %__MODULE__{user: user, page: page}
+  end
+
+  defp tweets_in_timeline(timeline) do
+    from tt in HomeTimelineTweet,
+      where: tt.home_timeline_id == ^timeline.id,
+      order_by: [desc: tt.id],
+      join: tw in assoc(tt, :tweet),
+      select: tw
   end
 
   @spec tweets_to_photo_urls([Tweet.t]) :: [binary]
