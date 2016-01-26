@@ -4,9 +4,9 @@ defmodule Tev.PageView do
 
   use Tev.Web, :view
 
-  import Ecto, only: [assoc: 2]
   import Ecto.Query
 
+  alias Tev.HomeTimeline
   alias Tev.HomeTimelineTweet
   alias Tev.Repo
   alias Tev.Tweet
@@ -15,9 +15,7 @@ defmodule Tev.PageView do
   @spec new(%{}, User.t) :: t
   def new(params, user) do
     page =
-      user
-      |> assoc(:home_timeline)
-      |> Repo.one!
+      HomeTimeline.get_or_insert_by_user_id(user.id)
       |> tweets_in_timeline
       |> limit(^Application.get_env(:tev, :max_timeline_tweets))
       |> Repo.paginate(params)

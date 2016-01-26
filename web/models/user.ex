@@ -51,6 +51,15 @@ defmodule Tev.User do
   end
 
   @doc """
+  Inserts home timeline unless exists.
+  """
+  @spec ensure_timeline_exists(t) :: t
+  def ensure_timeline_exists(user) do
+    HomeTimeline.get_or_insert_by_user_id(user.id)
+    user
+  end
+
+  @doc """
   Inserts or updates `access_token` assoc with given credentials and (re)preloads it.
 
   Raises `Ecto.InvalidChangesetError` if `user` is not persisted.
