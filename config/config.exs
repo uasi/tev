@@ -41,6 +41,7 @@ config :phoenix, :generators,
 
 config :quantum, cron: [
   "*/20 * * * *": {Tev.Tw.Dispatcher, :dispatch_all},
+  "@daily": {Tev.Tw.Trimmer, :trim_all},
 ]
 
 # Import environment specific config. This must remain at the bottom
