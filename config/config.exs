@@ -5,6 +5,9 @@
 # is restricted to this project.
 use Mix.Config
 
+config :tev,
+  max_timeline_tweets: 1000
+
 # Configures the endpoint
 config :tev, Tev.Endpoint,
   url: [host: "localhost"],
