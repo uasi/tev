@@ -5,12 +5,12 @@ config :logger, level: :info
 
 config :tev, Tev.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: System.get_env("HOSTNAME"), port: 80],
+  url: [host: System.get_env("APP_HOSTNAME"), port: 80],
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 if System.get_env("HTTPS_REVERSE_PROXY") == "1" do
   config :tev, Tev.Endpoint,
-    url: [scheme: "https", host: System.get_env("HOSTNAME"), port: 443]
+    url: [scheme: "https", host: System.get_env("APP_HOSTNAME"), port: 443]
 end
 
 config :tev, Tev.Repo,
