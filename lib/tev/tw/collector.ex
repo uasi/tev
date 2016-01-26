@@ -84,6 +84,6 @@ defmodule Tev.Tw.Collector do
       |> HomeTimeline.changeset(%{max_tweet_id: max_id})
       |> Repo.update!
     end
-    Logger.info("#{__MODULE__} #{inspect self}: inserted tweets")
+    Logger.info("#{__MODULE__} #{inspect self}: inserted tweets; n=#{length tweets}")
   end
 end
