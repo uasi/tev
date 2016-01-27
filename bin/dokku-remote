@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ssh -t "$DOKKU_REMOTE_HOST" dokku "$@"
