@@ -38,7 +38,7 @@ defmodule Tev.Tw.Fetcher.Worker do
 
     user_id = user.id
     since_id = timeline.max_tweet_id
-    Logger.info("#{__MODULE__} #{inspect self}: fetching tweets; user_id=#{user_id} since_id=#{since_id}")
+    Logger.info("#{__MODULE__} #{inspect self}: fetching tweets; user_id=#{user_id} timeline_id=#{timeline.id} since_id=#{since_id}")
     TickTock.tick
     result = fetch_all_tweets(user_id, since_id)
     elapsed = TickTock.tock

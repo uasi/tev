@@ -37,13 +37,13 @@ defmodule Tev.Tw.Collector do
     {:reply, :ok, nil}
   end
 
-  defp do_collect(_timeline, []) do
-    Logger.info("#{__MODULE__} #{inspect self}: no tweets, do nothing")
+  defp do_collect(timeline, []) do
+    Logger.info("#{__MODULE__} #{inspect self}: no tweets, do nothing; timeline_id=#{timeline.id}")
   end
   defp do_collect(timeline, tweets) do
     Repo.transaction fn ->
       if max_id_changed?(timeline) do
-        Logger.info("#{__MODULE__} #{inspect self}: timeline has changed since fetch requested; discarding fetched tweets")
+        Logger.info("#{__MODULE__} #{inspect self}: timeline has changed since fetch requested; discarding fetched tweets; timeline_id=#{timeline.id}")
       else
         max_id = List.first(tweets).id
         tweets
@@ -65,7 +65,7 @@ defmodule Tev.Tw.Collector do
   end
 
   defp insert_tweets(tweets, timeline, max_id) do
-    Logger.info("#{__MODULE__} #{inspect self}: inserting tweets; n=#{length tweets}")
+    Logger.info("#{__MODULE__} #{inspect self}: inserting tweets; n=#{length tweets} timeline_id=#{timeline.id}")
     Repo.transaction fn ->
       for tweet <- tweets do
         unless Repo.get(Tweet, tweet.id, log: false) do
@@ -83,7 +83,8 @@ defmodule Tev.Tw.Collector do
       timeline
       |> HomeTimeline.changeset(%{max_tweet_id: max_id})
       |> Repo.update!
+      Logger.info("#{__MODULE__} #{inspect self}: set max id; id=#{max_id} timeline_id=#{timeline.id}")
     end
-    Logger.info("#{__MODULE__} #{inspect self}: inserted tweets; n=#{length tweets}")
+    Logger.info("#{__MODULE__} #{inspect self}: inserted tweets; n=#{length tweets} timeline_id=#{timeline.id}")
   end
 end
