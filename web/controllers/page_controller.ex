@@ -4,6 +4,8 @@ defmodule Tev.PageController do
   use Tev.Auth, :current_user
 
   alias Tev.PageView
+  alias Tev.UnauthorizedError
+  alias Tev.User
 
   def index(conn, _params, nil) do
     render conn, "index.html", view: nil
@@ -19,7 +21,11 @@ defmodule Tev.PageController do
 
   @authorize true
   def fetch(conn, _params, user) do
-    Tev.Tw.Dispatcher.dispatch(user)
-    text conn, "ok"
+    if User.admin?(user) do
+      Tev.Tw.Dispatcher.dispatch(user)
+      text conn, "ok"
+    else
+      raise UnauthorizedError
+    end
   end
 end

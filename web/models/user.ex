@@ -74,4 +74,17 @@ defmodule Tev.User do
       |> Repo.insert_or_update!
     %{user | access_token: new_token}
   end
+
+  @doc """
+  Returns true if the user is admin, false otherwise.
+  """
+  @spec admin?(t) :: boolean
+  def admin?(user) do
+    Integer.to_string(user.id) in admin_id_strings
+  end
+
+  defp admin_id_strings do
+    (System.get_env("ADMIN_ID") || "")
+    |> String.split(",", trim: true)
+  end
 end
