@@ -3,6 +3,7 @@ defmodule Tev.PageController do
   use Tev.Auth, authorize: false
   use Tev.Auth, :current_user
 
+  alias Tev.ForbiddenError
   alias Tev.PageView
   alias Tev.UnauthorizedError
   alias Tev.User
@@ -22,8 +23,12 @@ defmodule Tev.PageController do
   @authorize true
   def fetch(conn, _params, user) do
     if User.admin?(user) do
-      Tev.Tw.Dispatcher.dispatch(user)
-      text conn, "ok"
+      if User.can_fetch?(user) do
+        Tev.Tw.Dispatcher.dispatch(user)
+        text conn, "ok"
+      else
+        raise ForbiddenError
+      end
     else
       raise UnauthorizedError
     end
