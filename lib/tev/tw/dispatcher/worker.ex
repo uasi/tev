@@ -18,12 +18,12 @@ defmodule Tev.Tw.Dispatcher.Worker do
   end
 
   def run(pid, user) do
-    GenServer.cast(pid, {:run, user})
+    GenServer.call(pid, {:run, user})
   end
 
-  def handle_cast({:run, user}, _state) do
+  def handle_call({:run, user}, _from, _state) do
     timeline = HomeTimeline.get_or_insert_by_user_id(user.id)
     Fetcher.fetch(user, timeline)
-    {:noreply, nil}
+    {:reply, :ok, nil}
   end
 end

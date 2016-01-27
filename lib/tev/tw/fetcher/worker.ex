@@ -22,10 +22,10 @@ defmodule Tev.Tw.Fetcher.Worker do
   end
 
   def run(pid, user, timeline) do
-    GenServer.cast(pid, {:run, user, timeline})
+    GenServer.call(pid, {:run, user, timeline})
   end
 
-  def handle_cast({:run, user, timeline}, _state) do
+  def handle_call({:run, user, timeline}, _from, _state) do
     user =
       user
       |> Repo.preload(:access_token)
@@ -53,7 +53,7 @@ defmodule Tev.Tw.Fetcher.Worker do
         Logger.warn("#{__MODULE__} #{inspect self}: failed to fetch tweets; error=#{inspect e} elapsed=#{elapsed}ms")
     end
 
-    {:noreply, nil}
+    {:reply, :ok, nil}
   end
 
   defp fetch_all_tweets(user_id, since_id) do
