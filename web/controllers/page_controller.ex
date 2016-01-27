@@ -3,9 +3,7 @@ defmodule Tev.PageController do
   use Tev.Auth, authorize: false
   use Tev.Auth, :current_user
 
-  alias Tev.ForbiddenError
   alias Tev.PageView
-  alias Tev.UnauthorizedError
   alias Tev.User
 
   def index(conn, _params, nil) do
@@ -27,10 +25,10 @@ defmodule Tev.PageController do
         Tev.Tw.Dispatcher.dispatch(user)
         text conn, "ok"
       else
-        raise ForbiddenError
+        raise_forbidden
       end
     else
-      raise UnauthorizedError
+      raise_unauthorized
     end
   end
 end

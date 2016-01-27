@@ -34,6 +34,7 @@ defmodule Tev.Web do
       import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
 
+      import Tev.Errors
       import Tev.Router.Helpers
       import Tev.Gettext
     end
