@@ -7,7 +7,9 @@ defmodule Tev.PageController do
   alias Tev.User
 
   def index(conn, _params, nil) do
-    render conn, "index.html", view: nil
+    conn
+    |> put_layout(false)
+    |> render("landing.html")
   end
   def index(conn, params, user) do
     render conn, "index.html", view: PageView.new(params, user)

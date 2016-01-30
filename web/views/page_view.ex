@@ -47,4 +47,14 @@ defmodule Tev.PageView do
   defp photo_urls_in_tweet(_) do
     []
   end
+
+  @spec pagination_paths(Plug.Conn.t, t) :: %{first: term, prev: term, next: term, last: term}
+  defp pagination_paths(conn, _view = %{page: page}) do
+    index = page_path(conn, :index)
+    first = if page.page_number > 1, do: index
+    prev = if page.page_number > 1, do: index <> "?page=#{page.page_number - 1}"
+    next = if page.page_number < page.total_pages, do: index <> "?page=#{page.page_number + 1}"
+    last = if page.page_number < page.total_pages, do: index <> "?page=#{page.total_pages}"
+    %{first: first, prev: prev, next: next, last: last}
+  end
 end
