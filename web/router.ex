@@ -11,10 +11,11 @@ defmodule Tev.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
   end
 
   scope "/", Tev do
-    pipe_through :browser # Use the default browser stack
+    pipe_through :browser
 
     get "/", PageController, :index
     get "/confidential", PageController, :confidential
@@ -27,8 +28,9 @@ defmodule Tev.Router do
     get "/settings/account", SettingsController, :account
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Tev do
-  #   pipe_through :api
-  # end
+  scope "/api", Tev do
+    pipe_through :api
+
+    get "/rendered_tweets", ApiController, :rendered_tweets
+  end
 end

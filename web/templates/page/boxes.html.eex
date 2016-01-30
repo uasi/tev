@@ -1,0 +1,18 @@
+<%= for props <- tweet_props_stream(@page) do %>
+<div class="box">
+  <div class="box-figure">
+    <a href="<%= props.url %>" target="_blank">
+      <img src="<%= props.photo_url %>:thumb" width="150" height="150">
+    </a>
+  </div>
+  <div class="box-buttons">
+    <div class="box-buttons-other">
+      <a class="box-button" href="<%= props.photo_url %>:orig" target="_blank"><i class="fa fa-picture-o"></i></a>
+    </div>
+    <div class="box-buttons-twitter">
+      <a class="box-button retweet-button" href="https://twitter.com/intent/retweet?tweet_id=<%= props.id %>"><i class="fa fa-retweet"></i></a>
+      <a class="box-button like-button" href="https://twitter.com/intent/like?tweet_id=<%= props.id %>"><i class="fa fa-heart"></i></a>
+    </div>
+  </div>
+</div>
+<% end %>

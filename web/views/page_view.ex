@@ -62,4 +62,13 @@ defmodule Tev.PageView do
     last = if page.page_number < page.total_pages, do: index <> "?page=#{page.total_pages}"
     %{first: first, prev: prev, next: next, last: last}
   end
+
+  @spec next_page_number(term) :: integer | nil
+  def next_page_number(page) do
+    if page.page_number < page.total_pages do
+      page.page_number + 1
+    else
+      nil
+    end
+  end
 end
