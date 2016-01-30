@@ -10,10 +10,11 @@
 <body>
   <header class="header">
     <div class="header-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-      <a class="pure-menu-heading">tev</a>
+      <a class="pure-menu-heading">tev @<%= @view.user.screen_name %></a>
       <ul class="header-menu-list pure-menu-list">
         <li class="pure-menu-item"><a class="pure-menu-link" href="<%= page_path(@conn, :fetch) %>">Fetch</a></li>
-        <li class="pure-menu-item"><%= @view.user.id %></li>
+
+        <li class="pure-menu-item"><a class="pure-menu-link" href="<%= session_path(@conn, :logout) %>">Log out</a></li>
     </div>
   </header>
   <div class="layout pure-g">
