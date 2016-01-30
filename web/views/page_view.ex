@@ -12,6 +12,8 @@ defmodule Tev.PageView do
   alias Tev.Tweet
   alias Tev.User
 
+  @type tweet_props :: %{id: binary, url: binary, photo_url: binary}
+
   @spec new(%{}, User.t) :: t
   def new(params, user) do
     page =
@@ -30,22 +32,25 @@ defmodule Tev.PageView do
       select: tw
   end
 
-  @spec tweets_to_photo_urls([Tweet.t]) :: [binary]
-  defp tweets_to_photo_urls(tweets) do
+  @spec tweet_props_stream([Tweet.t]) :: [tweet_props]
+  defp tweet_props_stream(tweets) do
     tweets
-    |> Stream.map(&photo_urls_in_tweet/1)
+    |> Stream.map(&tweet_props/1)
     |> Stream.concat
-    |> Enum.to_list
   end
 
-  @spec photo_urls_in_tweet(%{}) :: Stream.t | []
-  defp photo_urls_in_tweet(%{object: %{"extended_entities" => %{"media" => media}}}) do
+  @spec tweet_props(Tweet.t) :: Stream.t | []
+  defp tweet_props(%{id: id, object: %{"extended_entities" => %{"media" => media}}}) do
+    photo_media_to_tweet_props = fn media ->
+      %{
+        id: id,
+        url: media["expanded_url"],
+        photo_url: media["media_url_https"],
+      }
+    end
     media
     |> Stream.filter(&(&1["type"] == "photo"))
-    |> Stream.map(&(&1["media_url_https"]))
-  end
-  defp photo_urls_in_tweet(_) do
-    []
+    |> Stream.map(photo_media_to_tweet_props)
   end
 
   @spec pagination_paths(Plug.Conn.t, t) :: %{first: term, prev: term, next: term, last: term}

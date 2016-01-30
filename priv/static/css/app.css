@@ -29,11 +29,62 @@ a:focus, a:hover {
 
 .box {
   display: inline-block;
-  width: 160px;
-  height: 160px;
+  width: 150px;
   margin: 20px;
+}
+
+.box-figure {
+  width: 150px;
+  height: 150px;
+}
+
+.box-buttons {
+  visibility: hidden;
+  margin-top: 0.5em;
+}
+
+.box:focus .box-buttons, .box:hover .box-buttons {
+  visibility: visible;
+}
+
+.box-buttons > div {
+  display: inline-block;
+}
+
+.box-buttons-other {
+  float: left;
+}
+
+.box-buttons-twitter {
+  float: right;
 }
 
 .pagination {
   text-align: center;
+}
+
+/* Twitter buttons
+ * See https://dev.twitter.com/overview/general/image-resources for display requirements
+ */
+
+.box-button {
+  width: 16px;
+  height: 16px;
+  color: #aab8c2;
+}
+
+.like-button:focus, .like-button:hover {
+  color: #e81c4f;
+}
+
+.like-button:active {
+  opacity: 0.5;
+}
+
+.retweet-button:focus, .retweet-button:hover {
+  color: #19cf86;
+}
+
+.retweet-button:active {
+  opacity: 0.5;
 }
