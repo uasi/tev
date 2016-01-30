@@ -1,60 +1,39 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>tev</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
-  <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-</head>
-<body>
-  <header class="header">
-    <div class="header-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-      <a class="pure-menu-heading">tev @<%= @view.user.screen_name %></a>
-      <ul class="header-menu-list pure-menu-list">
-        <li class="pure-menu-item"><a class="pure-menu-link" href="<%= page_path(@conn, :fetch) %>">Fetch</a></li>
-
-        <li class="pure-menu-item"><a class="pure-menu-link" href="<%= session_path(@conn, :logout) %>">Log out</a></li>
+<div class="layout pure-g">
+  <main class="main pure-u">
+    <div class="boxes">
+      <%= for photo_url <- tweets_to_photo_urls(@view.page.entries) do %>
+      <div class="box">
+        <div class="box-figure">
+          <a href="<%= photo_url <> ":orig" %>" target="_blank">
+            <img src="<%= photo_url <> ":thumb" %>">
+          </a>
+        </div>
+      </div>
+      <%= end %>
     </div>
-  </header>
-  <div class="layout pure-g">
-    <main class="main pure-u">
-      <div class="boxes">
-        <%= for photo_url <- tweets_to_photo_urls(@view.page.entries) do %>
-        <div class="box">
-          <div class="box-figure">
-            <a href="<%= photo_url <> ":orig" %>" target="_blank">
-              <img src="<%= photo_url <> ":thumb" %>">
-            </a>
-          </div>
-        </div>
-        <%= end %>
+    <div class="pagination">
+      <% paths = pagination_paths(@conn, @view) %>
+      <%= if paths.first do %>
+        <a class="pagination-button pure-button" href="<%= paths.first %>">&lt;&lt;</a>
+      <% else %>
+        <a class="pagination-button pure-button pure-button-disabled">&lt;&lt;</a>
+      <% end %>
+      <%= if paths.prev do %>
+        <a class="pagination-button pure-button" href="<%= paths.prev %>">&lt;</a>
+      <% else %>
+        <a class="pagination-button pure-button pure-button-disabled">&lt;</a>
+      <% end %>
+      <%= if paths.next do %>
+        <a class="pagination-button pure-button" href="<%= paths.next %>">&gt;</a>
+      <% else %>
+        <a class="pagination-button pure-button pure-button-disabled">&gt;</a>
+      <% end %>
+      <%= if paths.last do %>
+        <a class="pagination-button pure-button" href="<%= paths.last %>">&gt;&gt;</a>
+      <% else %>
+        <a class="pagination-button pure-button pure-button-disabled">&gt;&gt;</a>
+      <% end %>
       </div>
-      <div class="pagination">
-        <% paths = pagination_paths(@conn, @view) %>
-        <%= if paths.first do %>
-          <a class="pagination-button pure-button" href="<%= paths.first %>">&lt;&lt;</a>
-        <% else %>
-          <a class="pagination-button pure-button pure-button-disabled">&lt;&lt;</a>
-        <% end %>
-        <%= if paths.prev do %>
-          <a class="pagination-button pure-button" href="<%= paths.prev %>">&lt;</a>
-        <% else %>
-          <a class="pagination-button pure-button pure-button-disabled">&lt;</a>
-        <% end %>
-        <%= if paths.next do %>
-          <a class="pagination-button pure-button" href="<%= paths.next %>">&gt;</a>
-        <% else %>
-          <a class="pagination-button pure-button pure-button-disabled">&gt;</a>
-        <% end %>
-        <%= if paths.last do %>
-          <a class="pagination-button pure-button" href="<%= paths.last %>">&gt;&gt;</a>
-        <% else %>
-          <a class="pagination-button pure-button pure-button-disabled">&gt;&gt;</a>
-        <% end %>
-        </div>
-      </div>
-    </main>
-  </div>
-</body>
-</html>
+    </div>
+  </main>
+</div>

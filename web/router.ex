@@ -23,6 +23,8 @@ defmodule Tev.Router do
     get "/login", SessionController, :login
     get "/login/callback", SessionController, :login_callback
     get "/logout", SessionController, :logout
+
+    get "/settings/account", SettingsController, :account
   end
 
   # Other scopes may use custom stacks.
