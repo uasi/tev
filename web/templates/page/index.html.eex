@@ -1,38 +1,59 @@
-<div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
-  <%= if @view do %>
-    <p class="lead">Your Twitter ID is <%= @view.user.id %>.</p>
-  <% else %>
-    <p class="lead"><a href="/login">Log in</a></p>
-  <% end %>
-</div>
-
-
-<div class="row marketing">
-  <%= if @view do %>
-  <div class="col-lg-6">
-  <h4>
-    Photo URLs (n = <%= @view.page.total_entries %>,
-    page = <%= @view.page.page_number %> of <%= @view.page.total_pages %>)
-  </h4>
-    <ul>
-      <%= for photo_url <- tweets_to_photo_urls(@view.page.entries) do %>
-        <li><a href="<%= photo_url <> ":orig" %>" target="_blank"><img src="<%= photo_url <> ":thumb" %>"></a></li>
-      <% end %>
-    </ul>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tev</title>
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+</head>
+<body>
+  <header class="header">
+    <div class="header-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+      <a class="pure-menu-heading">tev</a>
+      <ul class="header-menu-list pure-menu-list">
+        <li class="pure-menu-item"><a class="pure-menu-link" href="<%= page_path(@conn, :fetch) %>">Fetch</a></li>
+        <li class="pure-menu-item"><%= @view.user.id %></li>
+    </div>
+  </header>
+  <div class="layout pure-g">
+    <main class="main pure-u">
+      <div class="boxes">
+        <%= for photo_url <- tweets_to_photo_urls(@view.page.entries) do %>
+        <div class="box">
+          <div class="box-figure">
+            <a href="<%= photo_url <> ":orig" %>" target="_blank">
+              <img src="<%= photo_url <> ":thumb" %>">
+            </a>
+          </div>
+        </div>
+        <%= end %>
+      </div>
+      <div class="pagination">
+        <% paths = pagination_paths(@conn, @view) %>
+        <%= if paths.first do %>
+          <a class="pagination-button pure-button" href="<%= paths.first %>">&lt;&lt;</a>
+        <% else %>
+          <a class="pagination-button pure-button pure-button-disabled">&lt;&lt;</a>
+        <% end %>
+        <%= if paths.prev do %>
+          <a class="pagination-button pure-button" href="<%= paths.prev %>">&lt;</a>
+        <% else %>
+          <a class="pagination-button pure-button pure-button-disabled">&lt;</a>
+        <% end %>
+        <%= if paths.next do %>
+          <a class="pagination-button pure-button" href="<%= paths.next %>">&gt;</a>
+        <% else %>
+          <a class="pagination-button pure-button pure-button-disabled">&gt;</a>
+        <% end %>
+        <%= if paths.last do %>
+          <a class="pagination-button pure-button" href="<%= paths.last %>">&gt;&gt;</a>
+        <% else %>
+          <a class="pagination-button pure-button pure-button-disabled">&gt;&gt;</a>
+        <% end %>
+        </div>
+      </div>
+    </main>
   </div>
-  <%= if @view.page.total_pages > 1 do %>
-  <div class="col-lg-6">
-    <a href="./">first</a>
-    <%= if @view.page.page_number > 1 do %>
-      <a href="?page=<%= @view.page.page_number - 1 %>">prev</a>
-    <% end %>
-    <%= if @view.page.page_number < @view.page.total_pages do %>
-      <a href="?page=<%= @view.page.page_number + 1 %>">next</a>
-    <% end %>
-    <a href="?page=<%= @view.page.total_pages %>">last</a>
-  </div>
-  <% end %>
-  <% end %>
-</div>
+</body>
+</html>
