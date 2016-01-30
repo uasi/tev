@@ -42,7 +42,6 @@
       <% else %>
         <a class="pagination-button pure-button pure-button-disabled">&gt;&gt;</a>
       <% end %>
-      </div>
     </div>
   </main>
 </div>
