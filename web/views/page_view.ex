@@ -42,7 +42,7 @@ defmodule Tev.PageView do
   defp photo_urls_in_tweet(%{object: %{"extended_entities" => %{"media" => media}}}) do
     media
     |> Stream.filter(&(&1["type"] == "photo"))
-    |> Stream.map(&(&1["media_url"]))
+    |> Stream.map(&(&1["media_url_https"]))
   end
   defp photo_urls_in_tweet(_) do
     []
