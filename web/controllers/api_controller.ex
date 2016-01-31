@@ -6,6 +6,6 @@ defmodule Tev.ApiController do
   alias Tev.ApiView
 
   def rendered_tweets(conn, params, user) do
-    json conn, ApiView.rendered_tweets(conn, params, user)
+    json conn, ApiView.rendered_tweets(params, user)
   end
 end
