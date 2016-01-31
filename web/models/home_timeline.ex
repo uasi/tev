@@ -7,6 +7,8 @@ defmodule Tev.HomeTimeline do
 
   schema "home_timelines" do
     field :max_tweet_id, :integer
+    field :fetch_started_at, Ecto.DateTime
+    field :collected_at, Ecto.DateTime
 
     belongs_to :user, User
 
@@ -23,6 +25,8 @@ defmodule Tev.HomeTimeline do
   )
   @optional_fields ~w(
     max_tweet_id
+    fetch_started_at
+    collected_at
   )
 
   @doc """
