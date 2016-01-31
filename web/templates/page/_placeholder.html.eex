@@ -1,0 +1,7 @@
+<%# Shows placeholder if no tweets are collected %>
+<%= cond do %>
+<% !@collected -> %>
+  <div class="placeholder">Welcome to tev! I'm gathering photo tweets from your timeline now. Please reload the page after about half a minute.</div>
+<% !@has_entries -> %>
+  <div class="placeholder">I see no photo tweets in your timeline. Please come back later.</div>
+<% end %>
