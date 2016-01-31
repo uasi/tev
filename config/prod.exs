@@ -17,3 +17,9 @@ config :tev, Tev.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   pool_size: 20
+
+# Configure cron jobs
+config :quantum, cron: [
+  "*/20 * * * *": {Tev.Tw.Dispatcher, :dispatch_all},
+  "@daily": {Tev.Tw.Trimmer, :trim_all},
+]

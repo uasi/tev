@@ -41,3 +41,13 @@ config :tev, Tev.Repo,
   database: "tev_dev",
   hostname: "localhost",
   pool_size: 10
+
+# Configure cron jobs
+if System.get_env("DISABLE_CRON_JOBS") == "1" do
+  IO.puts "Cron jobs are disabled via DISABLE_CRON_JOBS"
+else
+  config :quantum, cron: [
+    "*/20 * * * *": {Tev.Tw.Dispatcher, :dispatch_all},
+    "@daily": {Tev.Tw.Trimmer, :trim_all},
+  ]
+end
