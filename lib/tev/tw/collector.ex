@@ -38,7 +38,8 @@ defmodule Tev.Tw.Collector do
   end
 
   defp do_collect(timeline, []) do
-    Logger.info("#{__MODULE__} #{inspect self}: no tweets, do nothing; timeline_id=#{timeline.id}")
+    Logger.info("#{__MODULE__} #{inspect self}: no tweets collected; timeline_id=#{timeline.id}")
+    HomeTimeline.update_collected_at!(timeline)
   end
   defp do_collect(timeline, tweets) do
     Repo.transaction fn ->
@@ -49,6 +50,7 @@ defmodule Tev.Tw.Collector do
         tweets
         |> Enum.filter(&photo_tweet?/1)
         |> insert_tweets(timeline, max_id)
+        HomeTimeline.update_collected_at!(timeline)
       end
     end
   end

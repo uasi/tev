@@ -1,5 +1,5 @@
 defmodule Tev.PageView do
-  defstruct [:user, :page]
+  defstruct [:user, :timeline, :page]
   @type t :: %__MODULE__{}
 
   use Tev.Web, :view
@@ -16,12 +16,13 @@ defmodule Tev.PageView do
 
   @spec new(%{}, User.t) :: t
   def new(params, user) do
+    timeline = HomeTimeline.get_or_insert_by_user_id(user.id)
     page =
-      HomeTimeline.get_or_insert_by_user_id(user.id)
+      timeline
       |> tweets_in_timeline
       |> limit(^Application.get_env(:tev, :max_timeline_tweets))
       |> Repo.paginate(params)
-    %__MODULE__{user: user, page: page}
+    %__MODULE__{user: user, timeline: timeline, page: page}
   end
 
   defp tweets_in_timeline(timeline) do
@@ -70,5 +71,15 @@ defmodule Tev.PageView do
     else
       nil
     end
+  end
+
+  @spec collected?(t) :: boolean
+  defp collected?(_view = %{timeline: timeline}) do
+    timeline.collected_at != nil
+  end
+
+  @spec has_entries?(t) :: boolean
+  defp has_entries?(_view = %{page: %{total_entries: total}}) do
+    total > 0
   end
 end

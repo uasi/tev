@@ -9,7 +9,6 @@ defmodule Tev.User do
 
   schema "users" do
     field :screen_name, :string
-    field :last_fetch_started_at, Ecto.DateTime
     has_one :access_token, AccessToken
     has_one :home_timeline, HomeTimeline
 
@@ -22,7 +21,6 @@ defmodule Tev.User do
     screen_name
   )
   @optional_fields ~w(
-    last_fetch_started_at
   )
 
   @doc """
@@ -95,7 +93,10 @@ defmodule Tev.User do
   def can_fetch?(user) do
     fetchable =
       from(u in __MODULE__,
-        where: u.id == ^user.id and u.last_fetch_started_at < datetime_add(^Ecto.DateTime.utc, -30, "second"),
+        join: tl in assoc(u, :home_timeline),
+        where: u.id == ^user.id and (
+          is_nil(tl.fetch_started_at) or
+          tl.fetch_started_at < datetime_add(^Ecto.DateTime.utc, -30, "second")),
         select: 1)
       |> Repo.one
     fetchable == 1

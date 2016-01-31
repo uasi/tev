@@ -6,11 +6,11 @@ defmodule Tev.Tw.Fetcher.Worker do
   require Logger
 
   alias Tev.AccessToken
+  alias Tev.HomeTimeline
   alias Tev.Repo
   alias Tev.TickTock
   alias Tev.Tw.Collector
   alias Tev.Tw.TimelineStream
-  alias Tev.User
 
   def start_link([]) do
     GenServer.start_link(__MODULE__, nil)
@@ -26,15 +26,12 @@ defmodule Tev.Tw.Fetcher.Worker do
   end
 
   def handle_call({:run, user, timeline}, _from, _state) do
-    user =
-      user
-      |> Repo.preload(:access_token)
-      |> User.changeset(%{last_fetch_started_at: Ecto.DateTime.utc})
-      |> Repo.update!
-
     user
+    |> Repo.preload(:access_token)
     |> Map.get(:access_token)
     |> AccessToken.configure_twitter_client
+
+    HomeTimeline.update_fetch_started_at!(timeline)
 
     user_id = user.id
     since_id = timeline.max_tweet_id

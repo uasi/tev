@@ -67,4 +67,30 @@ defmodule Tev.Tw.CollectorTest do
     assert count_inserted(tweets1) == length(tweets1)
     assert count_inserted(tweets2) == 0
   end
+
+  test "collector updates timeline.collected_at after collecting photo tweets" do
+    timeline = create(:home_timeline, user_id: create(:user).id)
+
+    assert timeline.collected_at == nil
+
+    t = Ecto.DateTime.utc
+    photo_tweets = build_many(:extwitter_photo_tweet, 3)
+    :ok = GenServer.call(Collector, {:collect, timeline, photo_tweets})
+    collected_at = Repo.reload(timeline).collected_at
+
+    assert Ecto.DateTime.compare(collected_at, t) in [:eq, :gt]
+  end
+
+  test "collector updates timeline.collected_at even after collecting no photo tweets" do
+    timeline = create(:home_timeline, user_id: create(:user).id)
+
+    assert timeline.collected_at == nil
+
+    t = Ecto.DateTime.utc
+    normal_tweets = build_many(:extwitter_tweet, 3)
+    :ok = GenServer.call(Collector, {:collect, timeline, normal_tweets})
+    collected_at = Repo.reload(timeline).collected_at
+
+    assert Ecto.DateTime.compare(collected_at, t) in [:eq, :gt]
+  end
 end
