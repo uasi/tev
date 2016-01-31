@@ -53,4 +53,16 @@ defmodule Tev.HomeTimeline do
     |> changeset(%{user_id: user_id})
     |> Repo.insert!
   end
+
+  def update_fetch_started_at!(timeline) do
+    timeline
+    |> changeset(%{fetch_started_at: Ecto.DateTime.utc})
+    |> Repo.update!
+  end
+
+  def update_collected_at!(timeline) do
+    timeline
+    |> changeset(%{collected_at: Ecto.DateTime.utc})
+    |> Repo.update!
+  end
 end
