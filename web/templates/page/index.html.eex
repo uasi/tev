@@ -1,10 +1,10 @@
 <div class="layout pure-g">
   <main class="main pure-u">
     <%= render(__MODULE__, "_placeholder.html", collected: collected?(@view), has_entries: has_entries?(@view)) %>
-    <div id="box-container" class="boxes">
+    <div id="box-container" class="box-container">
       <%= render(__MODULE__, "_boxes.html", page_entries: @view.page.entries) %>
-      <div id="spinner" class="hidden spinner">Loading...</div>
     </div>
+    <div id="spinner" class="hidden spinner">Loading...</div>
     <script>
       window.infiniteScrollContext = {
         nextPage: <%= next_page_number(@view.page) || "null" %>,
