@@ -9,12 +9,6 @@ defmodule Tev.Tw.CollectorTest do
   alias Tev.Tw.Collector
   alias Tev.Tweet
 
-  defp build_many(tag, n) do
-    Stream.repeatedly(fn -> build(tag) end)
-    |> Enum.take(n)
-    |> Enum.to_list
-  end
-
   defp count_inserted(tweets) do
     ids = Enum.map(tweets, &Map.get(&1, :id))
     from(t in Tweet,

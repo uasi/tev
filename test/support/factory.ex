@@ -4,6 +4,13 @@ defmodule Tev.Factory do
   alias Tev.HomeTimeline
   alias Tev.User
 
+  @spec build_many(atom, integer) :: [term]
+  def build_many(tag, n) do
+    Stream.repeatedly(fn -> build(tag) end)
+    |> Enum.take(n)
+    |> Enum.to_list
+  end
+
   def factory(:user) do
     %User{
       id: sequence(:user_id, &(&1)),
