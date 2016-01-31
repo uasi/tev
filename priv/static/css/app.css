@@ -80,6 +80,25 @@ a:focus, a:hover {
   background-color: #eeeeee;
 }
 
+hr.sentinel {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  width: 200px;
+  border-top: 4px double #999999;
+  opacity: 0.5;
+  text-align: center;
+}
+
+hr.sentinel:after {
+    content: '\01f64c';
+    display: inline-block;
+    position: relative;
+    top: -15px;
+    padding: 0 10px;
+    background: #ffffff;
+    font-size: 18px;
+}
+
 /* Twitter buttons
  * See https://dev.twitter.com/overview/general/image-resources for display requirements
  */

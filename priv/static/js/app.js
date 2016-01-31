@@ -4,7 +4,7 @@
 $(function () {
   // Context is defined only in the index page.
   var ctx = window.infiniteScrollContext
-  if (ctx == null || ctx.nextPage == null) { return }
+  if (ctx == null) { return }
 
   var $boxContainer = $('#box-container')
   var $spinner = $('#spinner')
@@ -16,7 +16,7 @@ $(function () {
     if (ctx.isLoading) { return }
 
     if (ctx.nextPage == null) {
-      $(document).off('scroll', ctx.handler)
+      loadNoMore(ctx)
       return
     }
 
@@ -42,4 +42,13 @@ function loadMore (ctx, $boxContainer, $spinner) {
     $boxContainer.append(data.html)
     $spinner.addClass('hidden')
   })
+}
+
+function loadNoMore (ctx) {
+  $(document).off('scroll', ctx.handler)
+
+  var $sentinel = $('#sentinel')
+  if ($sentinel.length) {
+    $sentinel.removeClass('hidden')
+  }
 }
