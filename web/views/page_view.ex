@@ -6,9 +6,9 @@ defmodule Tev.PageView do
 
   import Ecto.Query
 
-  alias Tev.HomeTimeline
-  alias Tev.HomeTimelineTweet
   alias Tev.Repo
+  alias Tev.Timeline
+  alias Tev.TimelineTweet
   alias Tev.Tweet
   alias Tev.User
 
@@ -16,7 +16,7 @@ defmodule Tev.PageView do
 
   @spec new(%{}, User.t) :: t
   def new(params, user) do
-    timeline = HomeTimeline.get_or_insert_by_user_id(user.id)
+    timeline = Timeline.get_or_insert_by_user_id(user.id)
     page =
       timeline
       |> tweets_in_timeline
@@ -26,8 +26,8 @@ defmodule Tev.PageView do
   end
 
   defp tweets_in_timeline(timeline) do
-    from tt in HomeTimelineTweet,
-      where: tt.home_timeline_id == ^timeline.id,
+    from tt in TimelineTweet,
+      where: tt.timeline_id == ^timeline.id,
       order_by: [desc: tt.id],
       join: tw in assoc(tt, :tweet),
       select: tw

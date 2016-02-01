@@ -1,19 +1,19 @@
-defmodule Tev.HomeTimeline do
+defmodule Tev.Timeline do
   use Tev.Web, :model
 
-  alias Tev.HomeTimelineTweet
   alias Tev.Repo
+  alias Tev.TimelineTweet
   alias Tev.User
 
-  schema "home_timelines" do
+  schema "timelines" do
     field :max_tweet_id, :integer
     field :fetch_started_at, Ecto.DateTime
     field :collected_at, Ecto.DateTime
 
     belongs_to :user, User
 
-    has_many :home_timeline_tweets, HomeTimelineTweet
-    has_many :tweets, through: [:home_timeline_tweets, :tweet]
+    has_many :timeline_tweets, TimelineTweet
+    has_many :tweets, through: [:timeline_tweets, :tweet]
 
     timestamps
   end

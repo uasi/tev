@@ -4,7 +4,7 @@ defmodule Tev.Tw.CollectorTest do
   import Ecto.Query, only: [from: 2]
   import Tev.Factory
 
-  alias Tev.HomeTimelineTweet
+  alias Tev.TimelineTweet
   alias Tev.Repo
   alias Tev.Tw.Collector
   alias Tev.Tweet
@@ -41,7 +41,7 @@ defmodule Tev.Tw.CollectorTest do
 
     ids = Enum.map(all_tweets, &Map.get(&1, :id))
     timeline_count =
-      from(t in HomeTimelineTweet,
+      from(t in TimelineTweet,
         select: count(t.id),
         where: t.tweet_id in ^ids)
       |> Repo.one

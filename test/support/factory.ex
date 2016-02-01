@@ -1,7 +1,7 @@
 defmodule Tev.Factory do
   use ExMachina.Ecto, repo: Tev.Repo
 
-  alias Tev.HomeTimeline
+  alias Tev.Timeline
   alias Tev.User
 
   @spec build_many(atom, integer) :: [term]
@@ -19,7 +19,7 @@ defmodule Tev.Factory do
   end
 
   def factory(:home_timeline) do
-    %HomeTimeline{
+    %Timeline{
       user_id: sequence(:user_id, &(&1)),
     }
   end

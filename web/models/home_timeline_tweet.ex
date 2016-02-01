@@ -1,18 +1,18 @@
-defmodule Tev.HomeTimelineTweet do
+defmodule Tev.TimelineTweet do
   use Tev.Web, :model
 
-  alias Tev.HomeTimeline
+  alias Tev.Timeline
   alias Tev.Tweet
 
-  schema "home_timeline_tweets" do
-    belongs_to :home_timeline, HomeTimeline
+  schema "timeline_tweets" do
+    belongs_to :timeline, Timeline
     belongs_to :tweet, Tweet
 
     timestamps
   end
 
   @required_fields ~w(
-    home_timeline_id
+    timeline_id
     tweet_id
   )
   @optional_fields ~w(
@@ -27,7 +27,7 @@ defmodule Tev.HomeTimelineTweet do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> assoc_constraint(:home_timeline)
+    |> assoc_constraint(:timeline)
     |> assoc_constraint(:tweet)
   end
 end

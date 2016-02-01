@@ -1,8 +1,8 @@
-defmodule Tev.Repo.Migrations.CreateHomeTimeline do
+defmodule Tev.Repo.Migrations.CreateTimeline do
   use Ecto.Migration
 
   def change do
-    create table(:home_timelines) do
+    create table(:timelines) do
       add :max_tweet_id, :bigint
       add :fetch_started_at, :datetime
       add :collected_at, :datetime
@@ -12,6 +12,6 @@ defmodule Tev.Repo.Migrations.CreateHomeTimeline do
       timestamps
     end
 
-    create unique_index(:home_timelines, [:user_id])
+    create unique_index(:timelines, [:user_id])
   end
 end

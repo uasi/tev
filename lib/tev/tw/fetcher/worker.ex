@@ -6,9 +6,9 @@ defmodule Tev.Tw.Fetcher.Worker do
   require Logger
 
   alias Tev.AccessToken
-  alias Tev.HomeTimeline
   alias Tev.Repo
   alias Tev.TickTock
+  alias Tev.Timeline
   alias Tev.Tw.Collector
   alias Tev.Tw.TimelineStream
 
@@ -31,7 +31,7 @@ defmodule Tev.Tw.Fetcher.Worker do
     |> Map.get(:access_token)
     |> AccessToken.configure_twitter_client
 
-    HomeTimeline.update_fetch_started_at!(timeline)
+    Timeline.update_fetch_started_at!(timeline)
 
     user_id = user.id
     since_id = timeline.max_tweet_id

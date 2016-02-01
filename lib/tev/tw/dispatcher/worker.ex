@@ -5,7 +5,7 @@ defmodule Tev.Tw.Dispatcher.Worker do
 
   require Logger
 
-  alias Tev.HomeTimeline
+  alias Tev.Timeline
   alias Tev.Tw.Fetcher
 
   def start_link([]) do
@@ -22,7 +22,7 @@ defmodule Tev.Tw.Dispatcher.Worker do
   end
 
   def handle_call({:run, user}, _from, _state) do
-    timeline = HomeTimeline.get_or_insert_by_user_id(user.id)
+    timeline = Timeline.get_or_insert_by_user_id(user.id)
     Fetcher.fetch(user, timeline)
     {:reply, :ok, nil}
   end
