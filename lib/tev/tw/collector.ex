@@ -8,8 +8,8 @@ defmodule Tev.Tw.Collector do
   require Logger
 
   alias Tev.Repo
-  alias Tev.HomeTimeline
-  alias Tev.HomeTimelineTweet
+  alias Tev.Timeline
+  alias Tev.TimelineTweet
   alias Tev.Tweet
 
   def start_link do
@@ -39,7 +39,7 @@ defmodule Tev.Tw.Collector do
 
   defp do_collect(timeline, []) do
     Logger.info("#{__MODULE__} #{inspect self}: no tweets collected; timeline_id=#{timeline.id}")
-    HomeTimeline.update_collected_at!(timeline)
+    Timeline.update_collected_at!(timeline)
   end
   defp do_collect(timeline, tweets) do
     Repo.transaction fn ->
@@ -50,7 +50,7 @@ defmodule Tev.Tw.Collector do
         tweets
         |> Enum.filter(&photo_tweet?/1)
         |> insert_tweets(timeline, max_id)
-        HomeTimeline.update_collected_at!(timeline)
+        Timeline.update_collected_at!(timeline)
       end
     end
   end
@@ -77,13 +77,13 @@ defmodule Tev.Tw.Collector do
           |> Repo.insert!
         end
 
-        %HomeTimelineTweet{home_timeline_id: timeline.id, tweet_id: tweet.id}
-        |> HomeTimelineTweet.changeset(%{})
+        %TimelineTweet{timeline_id: timeline.id, tweet_id: tweet.id}
+        |> TimelineTweet.changeset(%{})
         |> Repo.insert!
       end
 
       timeline
-      |> HomeTimeline.changeset(%{max_tweet_id: max_id})
+      |> Timeline.changeset(%{max_tweet_id: max_id})
       |> Repo.update!
       Logger.info("#{__MODULE__} #{inspect self}: set max id; id=#{max_id} timeline_id=#{timeline.id}")
     end

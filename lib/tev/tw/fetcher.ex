@@ -3,7 +3,7 @@ defmodule Tev.Tw.Fetcher do
   Fetches all available tweets in a timeline and pass them to the collector.
   """
 
-  alias Tev.HomeTimeline
+  alias Tev.Timeline
   alias Tev.Tw.Fetcher.Worker
   alias Tev.User
 
@@ -14,7 +14,7 @@ defmodule Tev.Tw.Fetcher do
   @doc """
   Fetches all available tweets in a timeline and pass them to the collector.
   """
-  @spec fetch(User.t, HomeTimeline.t) :: :ok
+  @spec fetch(User.t, Timeline.t) :: :ok
   def fetch(user, timeline) do
     spawn fn ->
       :poolboy.transaction(

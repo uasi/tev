@@ -2,15 +2,15 @@ defmodule Tev.User do
   use Tev.Web, :model
 
   alias Tev.AccessToken
-  alias Tev.HomeTimeline
   alias Tev.Repo
+  alias Tev.Timeline
 
   @primary_key {:id, :integer, autogenerate: false}
 
   schema "users" do
     field :screen_name, :string
     has_one :access_token, AccessToken
-    has_one :home_timeline, HomeTimeline
+    has_one :timeline, Timeline
 
     timestamps
   end
@@ -53,7 +53,7 @@ defmodule Tev.User do
   """
   @spec ensure_timeline_exists(t) :: t
   def ensure_timeline_exists(user) do
-    HomeTimeline.get_or_insert_by_user_id(user.id)
+    Timeline.get_or_insert_by_user_id(user.id)
     user
   end
 
@@ -93,7 +93,7 @@ defmodule Tev.User do
   def can_fetch?(user) do
     fetchable =
       from(u in __MODULE__,
-        join: tl in assoc(u, :home_timeline),
+        join: tl in assoc(u, :timeline),
         where: u.id == ^user.id and (
           is_nil(tl.fetch_started_at) or
           tl.fetch_started_at < datetime_add(^Ecto.DateTime.utc, -30, "second")),

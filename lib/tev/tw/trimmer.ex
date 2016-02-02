@@ -7,11 +7,10 @@ defmodule Tev.Tw.Trimmer do
 
   import Ecto.Query
 
-  alias Tev.HomeTimeline
-  alias Tev.HomeTimelineTweet
   alias Tev.Repo
   alias Tev.TickTock
   alias Tev.Timeline
+  alias Tev.TimelineTweet
 
   @max_tweets Application.get_env(:tev, :max_timeline_tweets)
 
@@ -41,8 +40,8 @@ defmodule Tev.Tw.Trimmer do
   end
 
   defp overflowed_timelines(max_tweets) do
-    from t in HomeTimeline,
-      join: tt in assoc(t, :home_timeline_tweets),
+    from t in Timeline,
+      join: tt in assoc(t, :timeline_tweets),
       group_by: t.id,
       having: count(tt.id) > ^max_tweets,
       select: t
@@ -52,14 +51,14 @@ defmodule Tev.Tw.Trimmer do
     # Keep in mind that `Repo.delete_all` allows only `where` and `join`
     # expressions in query.
     id =
-      from(tt in HomeTimelineTweet,
-        where: tt.home_timeline_id == ^timeline.id,
+      from(tt in TimelineTweet,
+        where: tt.timeline_id == ^timeline.id,
         order_by: [desc: :id],
         offset: ^max(max_tweets - 1, 0),
         limit: 1,
         select: tt.id)
       |> Repo.one
-    from tt in HomeTimelineTweet,
-      where: tt.home_timeline_id == ^timeline.id and tt.id < ^id
+    from tt in TimelineTweet,
+      where: tt.timeline_id == ^timeline.id and tt.id < ^id
   end
 end
