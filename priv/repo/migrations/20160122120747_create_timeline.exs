@@ -3,6 +3,7 @@ defmodule Tev.Repo.Migrations.CreateTimeline do
 
   def change do
     create table(:timelines) do
+      add :type, :integer, null: false
       add :max_tweet_id, :bigint
       add :fetch_started_at, :datetime
       add :collected_at, :datetime
@@ -12,6 +13,6 @@ defmodule Tev.Repo.Migrations.CreateTimeline do
       timestamps
     end
 
-    create unique_index(:timelines, [:user_id])
+    create index(:timelines, [:user_id, :type])
   end
 end

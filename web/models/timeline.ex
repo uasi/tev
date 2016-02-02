@@ -1,11 +1,15 @@
 defmodule Tev.Timeline do
   use Tev.Web, :model
+  use Tev.EctoType.Tag
 
   alias Tev.Repo
   alias Tev.TimelineTweet
   alias Tev.User
 
+  deftag TypeTag, [home: 1]
+
   schema "timelines" do
+    field :type, TypeTag
     field :max_tweet_id, :integer
     field :fetch_started_at, Ecto.DateTime
     field :collected_at, Ecto.DateTime
@@ -21,6 +25,7 @@ defmodule Tev.Timeline do
   @type t :: %__MODULE__{}
 
   @required_fields ~w(
+    type
     user_id
   )
   @optional_fields ~w(
@@ -50,7 +55,7 @@ defmodule Tev.Timeline do
 
   defp insert(user_id) do
     %__MODULE__{}
-    |> changeset(%{user_id: user_id})
+    |> changeset(%{user_id: user_id, type: :home})
     |> Repo.insert!
   end
 
