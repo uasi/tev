@@ -7,7 +7,6 @@ defmodule Tev.PageView do
   import Ecto.Query
 
   alias Tev.Repo
-  alias Tev.Timeline
   alias Tev.TimelineTweet
   alias Tev.Tweet
   alias Tev.User
@@ -16,7 +15,7 @@ defmodule Tev.PageView do
 
   @spec new(%{}, User.t) :: t
   def new(params, user) do
-    timeline = Timeline.get_or_insert_by_user_id(user.id)
+    timeline = Repo.preload(user, :timeline).timeline
     page =
       timeline
       |> tweets_in_timeline
