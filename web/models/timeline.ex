@@ -53,10 +53,16 @@ defmodule Tev.Timeline do
     Repo.one(query) || insert(user_id)
   end
 
-  defp insert(user_id) do
+  defp insert(user_id, type \\ :home) do
     %__MODULE__{}
-    |> changeset(%{user_id: user_id, type: :home})
+    |> changeset(%{user_id: user_id, type: type})
     |> Repo.insert!
+  end
+
+  def ensure_exists(user_id, type) do
+    query = from t in __MODULE__,
+      where: t.user_id == ^user_id
+    Repo.one(query) || insert(user_id, type)
   end
 
   def update_fetch_started_at!(timeline) do

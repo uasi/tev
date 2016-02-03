@@ -53,7 +53,7 @@ defmodule Tev.User do
   """
   @spec ensure_timeline_exists(t) :: t
   def ensure_timeline_exists(user) do
-    Timeline.get_or_insert_by_user_id(user.id)
+    Timeline.ensure_exists(user.id, :home)
     user
   end
 
