@@ -26,10 +26,14 @@ defmodule Tev.SessionController do
     raw_access_token =
       TwitterAuth.configure!(oauth_verifier, oauth_token)
       |> Map.take([:oauth_token, :oauth_token_secret])
-    TwitterAuth.authenticated_user!
-    |> User.from_user_object
-    |> User.ensure_timeline_exists
-    |> User.insert_or_update_access_token(raw_access_token)
+    user = TwitterAuth.authenticated_user!
+    {:ok, user} = Repo.transaction fn ->
+      user
+      |> User.from_user_object
+      |> User.ensure_timeline_exists
+      |> User.insert_or_update_access_token(raw_access_token)
+    end
+    user
   end
 
   @doc """
