@@ -10,7 +10,7 @@ defmodule Tev.User do
   schema "users" do
     field :screen_name, :string
     has_one :access_token, AccessToken
-    has_one :timeline, Timeline
+    has_many :timelines, Timeline
 
     timestamps
   end
@@ -93,8 +93,8 @@ defmodule Tev.User do
   def can_fetch?(user) do
     fetchable =
       from(u in __MODULE__,
-        join: tl in assoc(u, :timeline),
-        where: u.id == ^user.id and (
+        join: tl in assoc(u, :timelines),
+        where: u.id == ^user.id and tl.type == ^:home and (
           is_nil(tl.fetch_started_at) or
           tl.fetch_started_at < datetime_add(^Ecto.DateTime.utc, -30, "second")),
         select: 1)

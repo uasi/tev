@@ -22,8 +22,8 @@ defmodule Tev.Tw.Dispatcher.Worker do
   end
 
   def handle_call({:run, user}, _from, _state) do
-    timeline = Repo.preload(user, :timeline).timeline
-    Fetcher.fetch(user, timeline)
+    Repo.preload(user, :timelines).timelines
+    |> Enum.map(&Fetcher.fetch(user, &1))
     {:reply, :ok, nil}
   end
 end
