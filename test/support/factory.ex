@@ -36,4 +36,11 @@ defmodule Tev.Factory do
   def factory(:extwitter_photo_tweet) do
     %{build(:extwitter_tweet) | extended_entities: %{media: [%{type: "photo"}]}}
   end
+
+  def factory(:extwitter_user) do
+    %ExTwitter.Model.User{
+      id: sequence(:user_id, &(&1)),
+      screen_name: sequence(:user_screen_name, &"user_#{&1}"),
+    }
+  end
 end
