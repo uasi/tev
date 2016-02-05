@@ -12,9 +12,9 @@ defmodule Tev.Tw.TimelineStream do
 
   Raises `ExTwitter.Error` for other Twitter API-related errors.
   """
-  @spec home_timeline(integer, max_id: integer, since_id: integer)
+  @spec home_timeline(max_id: integer, since_id: integer)
         :: [ExTwitter.Model.Tweet.t] | no_return
-  def home_timeline(list_id, opts) do
+  def home_timeline(opts) do
     default_max_id = Keyword.get(opts, :max_id)
     since_id = Keyword.get(opts, :since_id)
 
@@ -22,7 +22,7 @@ defmodule Tev.Tw.TimelineStream do
       fn -> nil end,
       fn last_tweet ->
         max_id = if last_tweet, do: last_tweet.id - 1, else: default_max_id
-        case get_tweets(list_id: list_id, max_id: max_id, since_id: since_id) do
+        case get_tweets(max_id: max_id, since_id: since_id) do
           [] ->
             {:halt, nil}
           tweets ->
@@ -33,7 +33,7 @@ defmodule Tev.Tw.TimelineStream do
     )
   end
 
-  @spec get_tweets(list_id: integer, max_id: integer, since_id: integer)
+  @spec get_tweets(max_id: integer, since_id: integer)
         :: [ExTwitter.Model.Tweet.t] | no_return
   defp get_tweets(opts) do
     opts = Enum.reject(opts, fn {_k, v} -> v == nil end)
