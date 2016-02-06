@@ -6,6 +6,7 @@
   "cowlib": {:hex, :cowlib, "1.0.2"},
   "credo": {:hex, :credo, "0.2.6"},
   "decimal": {:hex, :decimal, "1.1.1"},
+  "dialyxir": {:hex, :dialyxir, "0.3.2"},
   "ecto": {:hex, :ecto, "1.1.2"},
   "ex_machina": {:hex, :ex_machina, "0.6.1"},
   "extwitter": {:git, "https://github.com/uasi/extwitter.git", "36fb925ab6483244c569c917223a1127e1f2e4a8", [branch: "tweet-extended-entities"]},

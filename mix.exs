@@ -10,7 +10,9 @@ defmodule Tev.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      aliases: aliases,
-     deps: deps]
+     deps: deps,
+     dialyzer: dialyzer,
+   ]
   end
 
   # Configuration for the OTP application.
@@ -36,6 +38,7 @@ defmodule Tev.Mixfile do
     [
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.2.0", only: [:dev, :test]},
+      {:dialyxir, "~> 0.3.0", only: [:dev]},
       {:ex_machina, "~> 0.6.1", only: [:test]},
       {:extwitter, github: "uasi/extwitter", branch: "tweet-extended-entities"},
       {:gettext, "~> 0.9"},
@@ -60,5 +63,12 @@ defmodule Tev.Mixfile do
   defp aliases do
     ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
      "ecto.reset": ["ecto.drop", "ecto.setup"]]
+  end
+
+  defp dialyzer do
+    [
+      flags: ~w(-Werror_handling -Wrace_conditions -Wunderspecs),
+      plt_file: "_local.plt",
+    ]
   end
 end
