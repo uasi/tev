@@ -47,12 +47,14 @@ defmodule Tev.Timeline do
     |> unique_constraint(:user_id)
   end
 
+  @spec ensure_exists(integer, TypeTag.t) :: t | no_return
   def ensure_exists(user_id, type) do
     query = from t in __MODULE__,
       where: t.user_id == ^user_id and t.type == ^type
     Repo.one(query) || insert(user_id, type)
   end
 
+  @spec ensure_exists(integer, TypeTag.t) :: t | no_return
   defp insert(user_id, type) do
     %__MODULE__{}
     |> changeset(%{user_id: user_id, type: type})
