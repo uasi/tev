@@ -25,11 +25,32 @@ defmodule Tev.EctoType.Tag do
   defmacro __using__(opts) do
     type = Keyword.get(opts, :type, @default_type)
     mapping = Keyword.fetch!(opts, :mapping)
+    if length(mapping) == 0 do
+      raise ArgumentError
+    end
+
     quote do
+      unquote(typespec(mapping))
       unquote(def_type(type))
       unquote(def_cast(mapping))
       unquote(def_load(mapping))
       unquote(def_dump(mapping))
+    end
+  end
+
+  defp typespec(mapping) do
+    tags = Keyword.keys(mapping)
+    tag_union =
+      tags
+      |> Enum.slice(0..-2)
+      |> List.foldr(List.last(tags), fn tag, acc ->
+        quote do
+          unquote(tag) | unquote(acc)
+        end
+      end)
+
+    quote do
+      @type t :: unquote(tag_union)
     end
   end
 
