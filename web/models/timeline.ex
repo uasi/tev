@@ -6,7 +6,7 @@ defmodule Tev.Timeline do
   alias Tev.TimelineTweet
   alias Tev.User
 
-  deftag TypeTag, [home: 1]
+  deftag TypeTag, [home: 1, like: 2]
 
   schema "timelines" do
     field :type, TypeTag
@@ -49,7 +49,7 @@ defmodule Tev.Timeline do
 
   def ensure_exists(user_id, type) do
     query = from t in __MODULE__,
-      where: t.user_id == ^user_id
+      where: t.user_id == ^user_id and t.type == ^type
     Repo.one(query) || insert(user_id, type)
   end
 
