@@ -21,7 +21,7 @@ defmodule Tev.Factory do
   def factory(:home_timeline) do
     %Timeline{
       user_id: sequence(:user_id, &(&1)),
-      type: Timeline.TypeTag.cast(:home) |> elem(1),
+      type: Timeline.Type.cast(:home) |> elem(1),
     }
   end
 
