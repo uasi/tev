@@ -30,7 +30,7 @@ defmodule Tev.SessionController do
     {:ok, user} = Repo.transaction fn ->
       user
       |> User.from_user_object
-      |> User.ensure_timeline_exists
+      |> User.ensure_timelines_exist
       |> User.insert_or_update_access_token(raw_access_token)
     end
     user
