@@ -35,9 +35,9 @@ defmodule Tev.Tw.Fetcher.Worker do
 
     user_id = user.id
     since_id = timeline.max_tweet_id
-    Logger.info("#{__MODULE__} #{inspect self}: fetching tweets; user_id=#{user_id} timeline_id=#{timeline.id} since_id=#{since_id}")
+    Logger.info("#{__MODULE__} #{inspect self}: fetching tweets; user_id=#{user_id} timeline_id=#{timeline.id}(#{timeline.type}) since_id=#{since_id}")
     TickTock.tick
-    result = fetch_all_tweets(since_id)
+    result = fetch_all_tweets(timeline)
     elapsed = TickTock.tock
 
     case result do
@@ -53,10 +53,10 @@ defmodule Tev.Tw.Fetcher.Worker do
     {:reply, :ok, nil}
   end
 
-  defp fetch_all_tweets(since_id) do
+  defp fetch_all_tweets(timeline) do
     try do
       tweets =
-        TimelineStream.home_timeline(since_id: since_id)
+        TimelineStream.timeline(timeline.type, since_id: timeline.max_tweet_id)
         |> Enum.to_list
       {:ok, tweets}
     rescue
