@@ -12,7 +12,7 @@ defmodule Tev.PageController do
     |> render("landing.html")
   end
   def index(conn, params, user) do
-    render conn, "index.html", view: PageView.new(params, user)
+    render conn, "index.html", view: PageView.new(params, user, :home)
   end
 
   @authorize true
@@ -32,5 +32,10 @@ defmodule Tev.PageController do
     else
       raise_unauthorized
     end
+  end
+
+  @authorize true
+  def likes(conn, params, user) do
+    render conn, "index.html", view: PageView.new(params, user, :like)
   end
 end
