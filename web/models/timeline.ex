@@ -6,10 +6,10 @@ defmodule Tev.Timeline do
   alias Tev.TimelineTweet
   alias Tev.User
 
-  deftag TypeTag, [home: 1, like: 2]
+  deftag Type, [home: 1, like: 2]
 
   schema "timelines" do
-    field :type, TypeTag
+    field :type, Type
     field :max_tweet_id, :integer
     field :fetch_started_at, Ecto.DateTime
     field :collected_at, Ecto.DateTime
@@ -47,14 +47,14 @@ defmodule Tev.Timeline do
     |> unique_constraint(:user_id)
   end
 
-  @spec ensure_exists(integer, TypeTag.t) :: t | no_return
+  @spec ensure_exists(integer, Type.t) :: t | no_return
   def ensure_exists(user_id, type) do
     query = from t in __MODULE__,
       where: t.user_id == ^user_id and t.type == ^type
     Repo.one(query) || insert(user_id, type)
   end
 
-  @spec ensure_exists(integer, TypeTag.t) :: t | no_return
+  @spec ensure_exists(integer, Type.t) :: t | no_return
   defp insert(user_id, type) do
     %__MODULE__{}
     |> changeset(%{user_id: user_id, type: type})

@@ -14,7 +14,7 @@ defmodule Tev.PageView do
 
   @type tweet_props :: %{id: binary, url: binary, photo_url: binary}
 
-  @spec new(%{}, User.t, Timeline.TypeTag.t) :: t
+  @spec new(%{}, User.t, Timeline.Type.t) :: t
   def new(params, user, timeline_type) do
     user = Repo.preload(user, :timelines)
     timeline = Enum.find(user.timelines, &(&1.type == timeline_type))
