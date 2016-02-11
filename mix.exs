@@ -51,6 +51,7 @@ defmodule Tev.Mixfile do
       {:postgrex, "~> 0.10.0"},
       {:quantum, "~> 1.6"},
       {:scrivener, "~> 1.1"},
+      {:timex, "~> 0.19.0"},
    ]
   end
 
