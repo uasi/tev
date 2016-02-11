@@ -49,11 +49,12 @@ defmodule Tev.User do
   end
 
   @doc """
-  Inserts home timeline unless exists.
+  Inserts home and like timelines unless exist.
   """
-  @spec ensure_timeline_exists(t) :: t
-  def ensure_timeline_exists(user) do
+  @spec ensure_timelines_exist(t) :: t
+  def ensure_timelines_exist(user) do
     Timeline.ensure_exists(user.id, :home)
+    Timeline.ensure_exists(user.id, :like)
     user
   end
 

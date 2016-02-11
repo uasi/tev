@@ -17,13 +17,13 @@ defmodule Tev.UserTest do
     refute changeset.valid?
   end
 
-  test "ensure_timeline_exists ensures timeline exists" do
+  test "ensure_timelines_exist ensures timelines exist" do
     user = factory(:extwitter_user)
     refute Repo.get_by(Timeline, user_id: user.id)
 
     user
     |> User.from_user_object
-    |> User.ensure_timeline_exists
+    |> User.ensure_timelines_exist
     assert Repo.get_by(Timeline, user_id: user.id).type == :home
   end
 end
