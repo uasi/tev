@@ -54,9 +54,7 @@ defmodule Tev.Tw.Fetcher.Worker do
     case result do
       {:ok, tweets} ->
         Logger.info("#{__MODULE__} #{inspect self}: fetched tweets; n=#{length tweets} elapsed=#{elapsed}ms")
-        if length(tweets) > 0 do
-          Collector.collect(timeline, tweets)
-        end
+        Collector.collect(timeline, tweets)
       {:error, e} ->
         Logger.warn("#{__MODULE__} #{inspect self}: failed to fetch tweets; error=#{inspect e} elapsed=#{elapsed}ms")
     end
