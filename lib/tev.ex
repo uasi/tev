@@ -9,6 +9,7 @@ defmodule Tev do
     import Supervisor.Spec, warn: false
 
     TwitterAuth.initialize
+    Tev.Tw.Fetcher.WorkerTable.initialize
 
     children = [
       supervisor(Tev.Endpoint, []),

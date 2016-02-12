@@ -86,20 +86,4 @@ defmodule Tev.User do
     (System.get_env("ADMIN_ID") || "")
     |> String.split(",", trim: true)
   end
-
-  @doc """
-  Returns true if the user can fetch timeline, false otherwise.
-  """
-  @spec can_fetch?(t) :: boolean
-  def can_fetch?(user) do
-    fetchable =
-      from(u in __MODULE__,
-        join: tl in assoc(u, :timelines),
-        where: u.id == ^user.id and tl.type == ^:home and (
-          is_nil(tl.fetch_started_at) or
-          tl.fetch_started_at < datetime_add(^Ecto.DateTime.utc, -30, "second")),
-        select: 1)
-      |> Repo.one
-    fetchable == 1
-  end
 end

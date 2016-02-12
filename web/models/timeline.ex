@@ -72,4 +72,22 @@ defmodule Tev.Timeline do
     |> changeset(%{collected_at: Ecto.DateTime.utc})
     |> Repo.update!
   end
+
+  def recently_collected?(_timeline = %{collected_at: nil}) do
+    false
+  end
+  def recently_collected?(timeline) do
+    elapsed_min =
+      timeline.collected_at
+      |> Ecto.DateTime.to_erl
+      |> Timex.Date.from
+      |> Timex.Date.to_timestamp
+      |> Timex.Time.elapsed(:mins)
+    case timeline.type do
+      :home ->
+        elapsed_min < 1
+      _ ->
+        elapsed_min < 15
+    end
+  end
 end

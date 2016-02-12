@@ -23,12 +23,8 @@ defmodule Tev.PageController do
   @authorize true
   def fetch(conn, _params, user) do
     if User.admin?(user) do
-      if User.can_fetch?(user) do
-        Tev.Tw.Dispatcher.dispatch(user)
-        text conn, "ok"
-      else
-        raise_forbidden
-      end
+      Tev.Tw.Dispatcher.dispatch(user)
+      text conn, "ok"
     else
       raise_unauthorized
     end

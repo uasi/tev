@@ -10,6 +10,7 @@ defmodule Tev.Tw.Fetcher.Worker do
   alias Tev.TickTock
   alias Tev.Timeline
   alias Tev.Tw.Collector
+  alias Tev.Tw.Fetcher.WorkerTable
   alias Tev.Tw.TimelineStream
 
   def start_link([]) do
@@ -26,6 +27,16 @@ defmodule Tev.Tw.Fetcher.Worker do
   end
 
   def handle_call({:run, user, timeline}, _from, _state) do
+    try do
+      WorkerTable.check_in(timeline.id)
+      do_run(user, timeline)
+    after
+      WorkerTable.check_out(timeline.id)
+    end
+    {:reply, :ok, nil}
+  end
+
+  defp do_run(user, timeline) do
     user
     |> Repo.preload(:access_token)
     |> Map.get(:access_token)
@@ -43,14 +54,10 @@ defmodule Tev.Tw.Fetcher.Worker do
     case result do
       {:ok, tweets} ->
         Logger.info("#{__MODULE__} #{inspect self}: fetched tweets; n=#{length tweets} elapsed=#{elapsed}ms")
-        if length(tweets) > 0 do
-          Collector.collect(timeline, tweets)
-        end
+        Collector.collect(timeline, tweets)
       {:error, e} ->
         Logger.warn("#{__MODULE__} #{inspect self}: failed to fetch tweets; error=#{inspect e} elapsed=#{elapsed}ms")
     end
-
-    {:reply, :ok, nil}
   end
 
   defp fetch_all_tweets(timeline) do
