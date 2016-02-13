@@ -86,4 +86,10 @@ defmodule Tev.User do
     (System.get_env("ADMIN_ID") || "")
     |> String.split(",", trim: true)
   end
+
+  defimpl Tev.L.Gist do
+    def gist(user) do
+      "user=#{user.id}@#{user.screen_name}"
+    end
+  end
 end

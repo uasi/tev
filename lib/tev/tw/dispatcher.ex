@@ -3,7 +3,7 @@ defmodule Tev.Tw.Dispatcher do
   Dispatches fetch request to fetcher.
   """
 
-  require Logger
+  use Tev.L
 
   alias Tev.Repo
   alias Tev.Tw.Dispatcher.Worker
@@ -18,7 +18,7 @@ defmodule Tev.Tw.Dispatcher do
   """
   @spec dispatch_all :: :ok
   def dispatch_all do
-    Logger.info("#{__MODULE__}: dispatch all")
+    L.info("dispatch all")
     spawn fn ->
       Repo.all(User)
       |> Enum.map(&run_pooled_worker/1)

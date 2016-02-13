@@ -2,8 +2,7 @@ defmodule Tev.Tw.Dispatcher.Worker do
   @moduledoc false
 
   use GenServer
-
-  require Logger
+  use Tev.L
 
   alias Tev.Repo
   alias Tev.Timeline
@@ -15,7 +14,7 @@ defmodule Tev.Tw.Dispatcher.Worker do
   end
 
   def init(_) do
-    Logger.debug("#{__MODULE__} #{inspect self}: started")
+    L.debug("started")
     {:ok, nil}
   end
 
@@ -33,9 +32,9 @@ defmodule Tev.Tw.Dispatcher.Worker do
   defp try_fetch(user, timeline, timeout_ms) do
     cond do
       Timeline.recently_collected?(timeline) ->
-        Logger.debug("#{__MODULE__} #{inspect self}: skipping timeline (recently collected); user_id=#{user.id} timeline_id=#{timeline.id}(#{timeline.type})")
+        L.debug("skipping timeline (recently collected)", [user, timeline])
       WorkerTable.live_worker_exists?(timeline.id, timeout_ms) ->
-        Logger.debug("#{__MODULE__} #{inspect self}: skipping timeline (worker is running); user_id=#{user.id} timeline_id=#{timeline.id}(#{timeline.type})")
+        L.debug("skipping timeline (worker is running)", [user, timeline])
       true ->
         Fetcher.fetch(user, timeline)
     end
