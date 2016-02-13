@@ -2,8 +2,7 @@ defmodule Tev.Tw.Fetcher.Worker do
   @moduledoc false
 
   use GenServer
-
-  require Logger
+  use Tev.L
 
   alias Tev.AccessToken
   alias Tev.Repo
@@ -18,7 +17,7 @@ defmodule Tev.Tw.Fetcher.Worker do
   end
 
   def init(_) do
-    Logger.debug("#{__MODULE__} #{inspect self}: started")
+    L.debug("started")
     {:ok, nil}
   end
 
