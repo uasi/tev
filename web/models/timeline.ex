@@ -90,4 +90,10 @@ defmodule Tev.Timeline do
         elapsed_min < 15
     end
   end
+
+  defimpl Tev.L.Gist do
+    def gist(timeline) do
+      "timeline=#{timeline.type}:#{timeline.id}"
+    end
+  end
 end
