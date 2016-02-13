@@ -3,8 +3,8 @@ defmodule Tev.ApiView do
 
   alias Tev.PageView
 
-  def rendered_tweets(params, user) do
-    %{page: page} = PageView.new(params, user)
+  def rendered_tweets(params, user, timeline_type) do
+    %{page: page} = PageView.new(params, user, timeline_type)
     html = render_to_string(PageView, "_boxes.html", page_entries: page.entries)
     %{
       html: html,

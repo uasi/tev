@@ -10,6 +10,7 @@
     <% end %>
     <script>
       window.infiniteScrollContext = {
+        timelineType: "<%= @view.timeline.type %>",
         nextPage: <%= next_page_number(@view.page) || "null" %>,
         isLoading: false
       }

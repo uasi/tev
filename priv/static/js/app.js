@@ -36,7 +36,8 @@ function loadMore (ctx, $boxContainer, $spinner) {
   ctx.isLoading = true
   $spinner.removeClass('hidden')
 
-  $.getJSON('/api/rendered_tweets?page=' + ctx.nextPage, function (data) {
+  var params = { timeline_type: ctx.timelineType, page: ctx.nextPage }
+  $.getJSON('/api/rendered_tweets', params, function (data) {
     ctx.isLoading = false
     ctx.nextPage = data.next_page
     $boxContainer.append(data.html)
