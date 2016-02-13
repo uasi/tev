@@ -35,6 +35,7 @@ defmodule Tev.EctoType.Tag do
       unquote(def_cast(mapping))
       unquote(def_load(mapping))
       unquote(def_dump(mapping))
+      unquote(def_tags(mapping))
     end
   end
 
@@ -93,6 +94,13 @@ defmodule Tev.EctoType.Tag do
     quote do
       def dump(v) when v in unquote(values), do: {:ok, v}
       def dump(_), do: :error
+    end
+  end
+
+  defp def_tags(mapping) do
+    tags = Enum.map(mapping, &elem(&1, 0))
+    quote do
+      def tags, do: unquote(tags)
     end
   end
 end
