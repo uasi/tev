@@ -8,4 +8,12 @@ defmodule Tev.Utils do
       ArgumentError -> :error
     end
   end
+
+  def elapsed_since_datetime(datetime, type \\ :timestamp) do
+    datetime
+    |> Ecto.DateTime.to_erl
+    |> Timex.Date.from
+    |> Timex.Date.to_timestamp
+    |> Timex.Time.elapsed(type)
+  end
 end
