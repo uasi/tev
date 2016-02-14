@@ -35,7 +35,6 @@ defmodule Tev.User do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> cast_assoc(:access_token)
   end
 
   @spec from_user_object(ExTwitter.Model.User.t) :: t

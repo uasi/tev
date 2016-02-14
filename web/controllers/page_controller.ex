@@ -12,7 +12,6 @@ defmodule Tev.PageController do
     |> render("landing.html")
   end
   def index(conn, params, user) do
-    user = Repo.preload(user, :access_token) # FIXME
     User.update_visited_at!(user, loose: true)
     render conn, "index.html", view: PageView.new(params, user, :home)
   end
@@ -34,7 +33,6 @@ defmodule Tev.PageController do
 
   @authorize true
   def likes(conn, params, user) do
-    user = Repo.preload(user, :access_token) # FIXME
     User.update_visited_at!(user, loose: true)
     render conn, "index.html", view: PageView.new(params, user, :like)
   end
