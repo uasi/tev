@@ -4,11 +4,13 @@ defmodule Tev.User do
   alias Tev.AccessToken
   alias Tev.Repo
   alias Tev.Timeline
+  alias Tev.Utils
 
   @primary_key {:id, :integer, autogenerate: false}
 
   schema "users" do
     field :screen_name, :string
+    field :visited_at, Ecto.DateTime
     has_one :access_token, AccessToken
     has_many :timelines, Timeline
 
@@ -21,6 +23,7 @@ defmodule Tev.User do
     screen_name
   )
   @optional_fields ~w(
+    visited_at
   )
 
   @doc """
@@ -32,7 +35,6 @@ defmodule Tev.User do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> cast_assoc(:access_token)
   end
 
   @spec from_user_object(ExTwitter.Model.User.t) :: t
@@ -85,6 +87,16 @@ defmodule Tev.User do
   defp admin_id_strings do
     (System.get_env("ADMIN_ID") || "")
     |> String.split(",", trim: true)
+  end
+
+  def update_visited_at!(user, opts \\ []) do
+    loose = Keyword.get(opts, :loose, false)
+    t = user.visited_at
+    unless loose && t && Utils.elapsed_since_datetime(t, :mins) < 1 do
+      user
+      |> changeset(%{visited_at: Ecto.DateTime.utc})
+      |> Repo.update!
+    end
   end
 
   defimpl Tev.L.Gist do

@@ -12,6 +12,7 @@ defmodule Tev.PageController do
     |> render("landing.html")
   end
   def index(conn, params, user) do
+    User.update_visited_at!(user, loose: true)
     render conn, "index.html", view: PageView.new(params, user, :home)
   end
 
@@ -32,6 +33,7 @@ defmodule Tev.PageController do
 
   @authorize true
   def likes(conn, params, user) do
+    User.update_visited_at!(user, loose: true)
     render conn, "index.html", view: PageView.new(params, user, :like)
   end
 end
