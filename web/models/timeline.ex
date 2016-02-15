@@ -5,6 +5,7 @@ defmodule Tev.Timeline do
   alias Tev.Repo
   alias Tev.TimelineTweet
   alias Tev.User
+  alias Tev.Utils
 
   deftag Type, [home: 1, like: 2]
 
@@ -79,10 +80,7 @@ defmodule Tev.Timeline do
   def recently_collected?(timeline) do
     elapsed_min =
       timeline.collected_at
-      |> Ecto.DateTime.to_erl
-      |> Timex.Date.from
-      |> Timex.Date.to_timestamp
-      |> Timex.Time.elapsed(:mins)
+      |> Utils.elapsed_since_datetime(:mins)
     case timeline.type do
       :home ->
         elapsed_min < 1
