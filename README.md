@@ -24,6 +24,7 @@ Required:
 Optional:
 
 - `ADMIN_ID` - comma-separated Twitter user IDs (numeric ones)
+- `DATABASE_USE_SSL` - set to `1` if SSL should be used to connect to the database
 - `HTTPS_REVERSE_PROXY` - set to `1` if the app is behind an HTTPS-enabled reverse proxy
 
 For debugging:

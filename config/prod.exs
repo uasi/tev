@@ -16,6 +16,7 @@ end
 config :tev, Tev.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
+  ssl: System.get_env("DATABASE_USE_SSL") == "1",
   pool_size: 20
 
 # Configure cron jobs
