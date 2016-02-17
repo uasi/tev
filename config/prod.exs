@@ -19,6 +19,10 @@ config :tev, Tev.Repo,
   ssl: System.get_env("DATABASE_USE_SSL") == "1",
   pool_size: 20
 
+config :logger,
+  # Don't output "$time".
+  format: "$metadata[$level] $levelpad$message\n"
+
 # Configure cron jobs
 config :quantum, cron: [
   "*/20 * * * *": {Tev.Tw.Dispatcher, :dispatch_all},

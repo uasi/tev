@@ -3,7 +3,7 @@ defmodule Tev.Tw.Trimmer do
   Trims timeline.
   """
 
-  require Logger
+  use Tev.L
 
   import Ecto.Query
 
@@ -19,23 +19,23 @@ defmodule Tev.Tw.Trimmer do
     timelines =
       overflowed_timelines(max_tweets)
       |> Repo.all
-    Logger.info("#{__MODULE__}: trimming timelines; n=#{length timelines} limit=#{max_tweets}")
+    L.info("trimming timelines", [n: length(timelines), limit: max_tweets])
     TickTock.tick
     timelines
     |> Enum.map(&trim(&1, max_tweets))
-    Logger.info("#{__MODULE__}: trimmed timelines; elapsed=#{TickTock.tock}ms")
+    L.info("trimmed timelines", [elapsed: "#{TickTock.tock}ms"])
     :ok
   end
 
   @spec trim(Timeline.t, integer) :: integer
   def trim(timeline, max_tweets \\ @max_tweets) do
-    Logger.info("#{__MODULE__}: trimming timeline; id=#{timeline.id} limit=#{max_tweets}")
+    L.info("trimming timeline", [timeline, limit: max_tweets])
     {:ok, {deleted, _}} =
       Repo.transaction fn ->
         overflowed_timeline_tweets(timeline, max_tweets)
         |> Repo.delete_all
       end
-    Logger.info("#{__MODULE__}: trimmed timeline; deleted_tweets=#{deleted}")
+    L.info("trimmed timeline", [timeline, deleted_tweets: deleted])
     deleted
   end
 

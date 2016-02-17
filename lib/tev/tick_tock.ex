@@ -1,5 +1,5 @@
 defmodule Tev.TickTock do
-  require Logger
+  use Tev.L
 
   @spec tick :: integer
   def tick do
@@ -12,7 +12,7 @@ defmodule Tev.TickTock do
   def tock do
     case Process.get(__MODULE__) do
       nil ->
-        Logger.warn("#{__MODULE__}: tock called before tick")
+        L.warn("tock called before tick")
         0
       t ->
         monotonic_time - t

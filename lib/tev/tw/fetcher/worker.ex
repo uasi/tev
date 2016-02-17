@@ -43,19 +43,17 @@ defmodule Tev.Tw.Fetcher.Worker do
 
     Timeline.update_fetch_started_at!(timeline)
 
-    user_id = user.id
-    since_id = timeline.max_tweet_id
-    Logger.info("#{__MODULE__} #{inspect self}: fetching tweets; user_id=#{user_id} timeline_id=#{timeline.id}(#{timeline.type}) since_id=#{since_id}")
+    L.info("fetching tweets", [user, timeline, since_id: timeline.max_tweet_id])
     TickTock.tick
     result = fetch_all_tweets(timeline)
     elapsed = TickTock.tock
 
     case result do
       {:ok, tweets} ->
-        Logger.info("#{__MODULE__} #{inspect self}: fetched tweets; n=#{length tweets} elapsed=#{elapsed}ms")
+        L.info("fetched tweets", [n: length(tweets), elapsed: "#{elapsed}ms"])
         Collector.collect(timeline, tweets)
       {:error, e} ->
-        Logger.warn("#{__MODULE__} #{inspect self}: failed to fetch tweets; error=#{inspect e} elapsed=#{elapsed}ms")
+        L.warn("failed to fetch tweets", [error: e, elapsed: "#{elapsed}ms"])
     end
   end
 

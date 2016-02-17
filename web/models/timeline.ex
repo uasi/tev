@@ -91,7 +91,7 @@ defmodule Tev.Timeline do
 
   defimpl Tev.L.Gist do
     def gist(timeline) do
-      "timeline=#{timeline.type}:#{timeline.id}"
+      "timeline=#{timeline.id}(#{timeline.type})"
     end
   end
 end
