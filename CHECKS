@@ -1,0 +1,9 @@
+# Dokku zero downtime deployment configuration
+#
+# See http://dokku.viewdocs.io/dokku/checks-examples/ for the details.
+
+WAIT=5
+TIMEOUT=3
+ATTEMPTS=5
+
+/ html
