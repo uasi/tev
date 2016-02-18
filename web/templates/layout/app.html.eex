@@ -15,14 +15,14 @@
 <body>
   <header class="header">
     <div class="header-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-      <a class="header-menu-heading pure-menu-heading" href="<%= page_path(@conn, :index) %>">tev</a>
+      <a class="header-menu-heading pure-menu-heading" href="<%= path_to(@conn, :page, :index) %>">tev</a>
       <ul class="header-menu-list pure-menu-list">
         <% user = assigns[:user] || Map.get(assigns[:view] || %{}, :user) %>
         <%= if user do %>
           <%= if Tev.User.admin?(user) do %>
-            <li class="pure-menu-item"><a class="pure-menu-link" href="<%= page_path(@conn, :fetch) %>">Fetch</a></li>
+            <li class="pure-menu-item"><a class="pure-menu-link" href="<%= path_to(@conn, :page, :fetch) %>">Fetch</a></li>
           <% end %>
-          <li class="pure-menu-item"><a class="pure-menu-link" href="<%= settings_path(@conn, :account) %>">@<%= user.screen_name %></a></li>
+          <li class="pure-menu-item"><a class="pure-menu-link" href="<%= path_to(@conn, :settings, :account) %>">@<%= user.screen_name %></a></li>
         <% else %>
           <li class="pure-menu-item"><a class="pure-menu-link" href="<%= session_path(@conn, :login) %>">Log in</a></li>
         <% end %>
