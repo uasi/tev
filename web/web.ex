@@ -35,8 +35,11 @@ defmodule Tev.Web do
       import Ecto.Query, only: [from: 1, from: 2]
 
       import Tev.Errors
-      import Tev.Router.Helpers
       import Tev.Gettext
+
+      # Path helpers
+      use Tev.LocalizedPathHelpers
+      import Tev.Router.Helpers, only: [static_path: 2, static_url: 2]
     end
   end
 
@@ -50,9 +53,12 @@ defmodule Tev.Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Tev.Router.Helpers
       import Tev.ErrorHelpers
       import Tev.Gettext
+
+      # Path helpers
+      use Tev.LocalizedPathHelpers
+      import Tev.Router.Helpers, only: [session_path: 2, static_path: 2]
     end
   end
 
