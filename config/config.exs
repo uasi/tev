@@ -29,6 +29,9 @@ config :tev, Tev.Endpoint,
   pubsub: [name: Tev.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :tev, Tev.Gettext,
+  default_locale: "en"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

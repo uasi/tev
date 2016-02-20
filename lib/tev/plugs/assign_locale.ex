@@ -2,9 +2,10 @@ defmodule Tev.Plugs.AssignLocale do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    supported_locales = Gettext.known_locales(Tev.Gettext)
-    locale = List.first(extract_accept_language(conn))
-    if locale in supported_locales do
+    language_tag = List.first(extract_accept_language(conn))
+    if language_tag do
+      locale = Tev.Gettext.find_locale(language_tag) ||
+        Tev.Gettext.default_locale
       Plug.Conn.assign(conn, :locale, locale)
     else
       Plug.Conn.assign(conn, :locale, Tev.Gettext.default_locale)
