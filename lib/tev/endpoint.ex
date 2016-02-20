@@ -37,6 +37,7 @@ defmodule Tev.Endpoint do
 
   plug Tev.Plugs.AssignLocale, supported_locales: ~w(ja en)
   plug Tev.Plugs.HandleLocalizedPath, supported_locales: ~w(ja en)
+  plug Tev.Plugs.ConfigureGettext
 
   plug Tev.Router
 end
