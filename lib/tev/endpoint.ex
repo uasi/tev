@@ -35,8 +35,9 @@ defmodule Tev.Endpoint do
     key: "_tev_key",
     signing_salt: "+2w/u8Eu"
 
-  plug Tev.Plugs.AssignLocale, supported_locales: ~w(ja en)
-  plug Tev.Plugs.HandleLocalizedPath, supported_locales: ~w(ja en)
+  plug Tev.Plugs.AssignLocale
+  plug Tev.Plugs.HandleLocalizedPath
+  plug Tev.Plugs.ConfigureGettext
 
   plug Tev.Router
 end

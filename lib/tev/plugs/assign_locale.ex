@@ -1,14 +1,13 @@
 defmodule Tev.Plugs.AssignLocale do
   def init(opts), do: opts
 
-  def call(conn, opts) do
-    supported_locales = [default_locale | _] =
-      Keyword.fetch!(opts, :supported_locales)
+  def call(conn, _opts) do
+    supported_locales = Gettext.known_locales(Tev.Gettext)
     locale = List.first(extract_accept_language(conn))
-    if locale && locale in supported_locales do
+    if locale in supported_locales do
       Plug.Conn.assign(conn, :locale, locale)
     else
-      Plug.Conn.assign(conn, :locale, default_locale)
+      Plug.Conn.assign(conn, :locale, Tev.Gettext.default_locale)
     end
   end
 

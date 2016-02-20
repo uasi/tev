@@ -3,6 +3,7 @@
 /_local.plt
 /db
 /deps
+/priv/gettext/*.pot
 /*.ez
 
 # Generate on crash by the VM

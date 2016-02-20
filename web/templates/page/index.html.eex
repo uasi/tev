@@ -4,7 +4,7 @@
     <div id="box-container" class="box-container">
       <%= render(__MODULE__, "_boxes.html", page_entries: @view.page.entries) %>
     </div>
-    <div id="spinner" class="hidden spinner">Loading...</div>
+    <div id="spinner" class="hidden spinner"><%= gettext "Loading..." %></div>
     <%= if @view.page.total_entries > 0 do %>
       <hr id="sentinel" class="hidden sentinel">
     <% end %>
