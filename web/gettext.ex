@@ -21,4 +21,8 @@ defmodule Tev.Gettext do
   See the [Gettext Docs](http://hexdocs.pm/gettext) for detailed usage.
   """
   use Gettext, otp_app: :tev
+
+  def default_locale do
+    Application.get_env(:tev, Tev.Gettext)[:default_locale] || "en"
+  end
 end
