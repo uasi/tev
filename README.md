@@ -21,13 +21,22 @@ Required:
 - `TWITTER_API_KEY`
 - `TWITTER_API_SECRET`
 
-Optional:
+Optional (general):
 
 - `ADMIN_ID` - comma-separated Twitter user IDs (numeric ones)
 - `DATABASE_USE_SSL` - set to `1` if SSL should be used to connect to the database
 - `HTTPS_REVERSE_PROXY` - set to `1` if the app is behind an HTTPS-enabled reverse proxy
 
-For debugging:
+Optional (for tuning):
+
+- `DISPATCHER_MAX_OVERFLOW`
+- `DISPATCHER_POOL_SIZE`
+- `DISPATCHER_TIMEOUT_MS`
+- `FETCHER_MAX_OVERFLOW`
+- `FETCHER_POOL_SIZE`
+- `FETCHER_TIMEOUT_MS`
+
+Optional (for debugging):
 
 - `DISABLE_CRON_JOBS` - set to `1` to disable jobs including periodic fetches
 

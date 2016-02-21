@@ -5,20 +5,23 @@
 # is restricted to this project.
 use Mix.Config
 
+Code.load_file("config_utils.exs", __DIR__)
+alias Tev.ConfigUtils, as: Utils
+
 config :tev,
   max_timeline_tweets: 1000
 
 config :tev, Tev.Tw.Dispatcher,
-  timeout_ms: 10_000,
-  pool_size: 5,
-  max_overflow: 1
+  timeout_ms: Utils.get_int_env("DISPATCHER_TIMEOUT_MS", 10_000),
+  pool_size: Utils.get_int_env("DISPATCHER_POOL_SIZE", 5),
+  max_overflow: Utils.get_int_env("DISPATCHER_MAX_OVERFLOW", 1)
 
 # Note: Each worker makes one to about ten API calls, depending how many tweets
 # are available in a timeline.
 config :tev, Tev.Tw.Fetcher,
-  timeout_ms: 120_000,
-  pool_size: 5,
-  max_overflow: 1
+  timeout_ms: Utils.get_int_env("FETCHER_TIMEOUT_MS", 120_000),
+  pool_size: Utils.get_int_env("FETCHER_POOL_SIZE", 5),
+  max_overflow: Utils.get_int_env("FETCHER_MAX_OVERFLOW", 1)
 
 # Configures the endpoint
 config :tev, Tev.Endpoint,
