@@ -40,7 +40,7 @@ defmodule Tev.Mixfile do
       {:credo, "~> 0.2.0", only: [:dev, :test]},
       {:dialyxir, "~> 0.3.0", only: [:dev]},
       {:ex_machina, "~> 0.6.1", only: [:test]},
-      {:extwitter, github: "uasi/extwitter", branch: "tweet-extended-entities"},
+      {:extwitter, "~> 0.6.2"},
       {:gettext, "~> 0.9"},
       {:oauth, github: "tim/erlang-oauth", tag: "v1.5.0", override: true},
       {:phoenix, "~> 1.1.0"},
@@ -51,7 +51,7 @@ defmodule Tev.Mixfile do
       {:postgrex, "~> 0.10.0"},
       {:quantum, "~> 1.6"},
       {:scrivener, "~> 1.1"},
-      {:timex, "~> 0.19.0"},
+      {:timex, "~> 1.0"},
    ]
   end
 
