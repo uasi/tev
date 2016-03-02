@@ -21,7 +21,7 @@ defmodule Tev.Tw.Dispatcher do
     L.info("dispatch all")
     spawn fn ->
       Repo.all(User)
-      |> Enum.map(&run_pooled_worker/1)
+      |> Enum.each(&run_pooled_worker/1)
     end
     :ok
   end

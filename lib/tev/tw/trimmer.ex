@@ -22,7 +22,7 @@ defmodule Tev.Tw.Trimmer do
     L.info("trimming timelines", [n: length(timelines), limit: max_tweets])
     TickTock.tick
     timelines
-    |> Enum.map(&trim(&1, max_tweets))
+    |> Enum.each(&trim(&1, max_tweets))
     L.info("trimmed timelines", [elapsed: "#{TickTock.tock}ms"])
     :ok
   end
