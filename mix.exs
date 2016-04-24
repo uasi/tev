@@ -41,7 +41,7 @@ defmodule Tev.Mixfile do
       {:dialyxir, "~> 0.3.0", only: [:dev]},
       {:ex_machina, "~> 0.6.1", only: [:test]},
       {:extwitter, "~> 0.6.2"},
-      {:gettext, "~> 0.10.0"},
+      {:gettext, "~> 0.11.0"},
       {:oauth, github: "tim/erlang-oauth", tag: "v1.5.0", override: true},
       {:phoenix, "~> 1.1.0"},
       {:phoenix_ecto, "~> 2.0"},
