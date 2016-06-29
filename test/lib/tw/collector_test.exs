@@ -9,6 +9,11 @@ defmodule Tev.Tw.CollectorTest do
   alias Tev.Tw.Collector
   alias Tev.Tweet
 
+  setup do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
+    Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
+  end
+
   defp count_inserted(tweets) do
     ids = Enum.map(tweets, &Map.get(&1, :id))
     from(t in Tweet,

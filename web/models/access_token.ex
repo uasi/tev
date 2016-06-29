@@ -25,7 +25,7 @@ defmodule Tev.AccessToken do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-  def changeset(model, params \\ :empty) do
+  def changeset(model, params \\ %{}) do
     params = encrypt_params(params)
     model
     |> cast(params, @required_fields, @optional_fields)
@@ -41,7 +41,7 @@ defmodule Tev.AccessToken do
     Map.merge(model, decrypted)
   end
 
-  defp encrypt_params(params) when params == :empty or params == %{}, do: params
+  defp encrypt_params(params) when map_size(params) == 0, do: params
   defp encrypt_params(params) do
     to_key = if is_binary(hd(Map.keys(params))), do: &(&1), else: &String.to_atom/1
     encryptable_fields = Enum.map(@encryptable_fields, to_key)

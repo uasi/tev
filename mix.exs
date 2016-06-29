@@ -20,8 +20,8 @@ defmodule Tev.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Tev, []},
-     applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :poolboy, :postgrex, :quantum] ++ applications(Mix.env)]
+     applications: [:phoenix, :phoenix_html, :phoenix_pubsub, :cowboy, :logger, :gettext,
+                    :phoenix_ecto, :poolboy, :postgrex, :quantum, :ecto] ++ applications(Mix.env)]
   end
 
   def applications(:test), do: [:ex_machina]
@@ -43,14 +43,15 @@ defmodule Tev.Mixfile do
       {:extwitter, "~> 0.6.2"},
       {:gettext, "~> 0.11.0"},
       {:oauth, github: "tim/erlang-oauth", tag: "v1.5.0", override: true},
-      {:phoenix, "~> 1.1.0"},
-      {:phoenix_ecto, "~> 2.0"},
-      {:phoenix_html, "~> 2.3"},
+      {:phoenix, "~> 1.2.0"},
+      {:phoenix_ecto, "~> 3.0"},
+      {:phoenix_html, "~> 2.6"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:phoenix_pubsub, "~> 1.0"},
       {:poolboy, "~> 1.5"},
       {:postgrex, "~> 0.11.0"},
       {:quantum, "~> 1.6"},
-      {:scrivener, "~> 1.1"},
+      {:scrivener_ecto, "~> 1.0"},
       {:timex, "~> 1.0"},
    ]
   end
@@ -63,7 +64,8 @@ defmodule Tev.Mixfile do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-     "ecto.reset": ["ecto.drop", "ecto.setup"]]
+     "ecto.reset": ["ecto.drop", "ecto.setup"],
+     "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
   end
 
   defp dialyzer do
