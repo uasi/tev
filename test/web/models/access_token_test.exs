@@ -1,21 +1,21 @@
 defmodule Tev.AccessTokenTest do
   use Tev.ModelCase
 
-#   alias Tev.AccessToken
+  alias Tev.AccessToken
 
-#   test "encrypt and decrypt" do
-#     %{id: user_id} = create(:user)
-#     attrs = %{oauth_token: "TOKEN", oauth_token_secret: "TOKEN_SECRET", user_id: user_id}
-#     %{id: id} =
-#       %AccessToken{}
-#       |> AccessToken.changeset(attrs)
-#       |> Repo.insert!
-#     access_token =
-#       AccessToken
-#       |> Repo.get(id)
-#       |> AccessToken.decrypt
+  test "encrypt and decrypt" do
+    %{id: user_id} = insert(:user)
+    attrs = %{oauth_token: "TOKEN", oauth_token_secret: "TOKEN_SECRET", user_id: user_id}
+    %{id: id} =
+      %AccessToken{}
+      |> AccessToken.changeset(attrs)
+      |> Repo.insert!
+    access_token =
+      AccessToken
+      |> Repo.get(id)
+      |> AccessToken.decrypt
 
-#     assert access_token.oauth_token == attrs[:oauth_token]
-#     assert access_token.oauth_token_secret == attrs[:oauth_token_secret]
-#   end
+    assert access_token.oauth_token == attrs[:oauth_token]
+    assert access_token.oauth_token_secret == attrs[:oauth_token_secret]
+  end
 end

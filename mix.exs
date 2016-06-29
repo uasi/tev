@@ -39,7 +39,7 @@ defmodule Tev.Mixfile do
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.3.0", only: [:dev, :test]},
       {:dialyxir, "~> 0.3.0", only: [:dev]},
-      {:ex_machina, "~> 0.6.1", only: [:test]},
+      {:ex_machina, "~> 1.0", only: [:test]},
       {:extwitter, "~> 0.6.2"},
       {:gettext, "~> 0.11.0"},
       {:oauth, github: "tim/erlang-oauth", tag: "v1.5.0", override: true},
