@@ -37,7 +37,7 @@ defmodule Tev.Mixfile do
   defp deps do
     [
       {:cowboy, "~> 1.0"},
-      {:credo, "~> 0.3.0", only: [:dev, :test]},
+      {:credo, "~> 0.4.0", only: [:dev, :test]},
       {:dialyxir, "~> 0.3.0", only: [:dev]},
       {:ex_machina, "~> 1.0", only: [:test]},
       {:extwitter, "~> 0.6.2"},
