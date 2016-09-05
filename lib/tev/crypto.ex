@@ -36,7 +36,7 @@ defmodule Tev.Crypto do
   end
 
   defp do_crypt(text, op, key, iv) do
-    apply(:crypto, :"block_#{op}", [:aes_cbc128, key, iv, text])
+    apply(:crypto, :"block_#{op}", [:aes_cbc, key, iv, text])
   end
 
   defp add_padding(plaintext) do
