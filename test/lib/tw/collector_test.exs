@@ -9,6 +9,11 @@ defmodule Tev.Tw.CollectorTest do
   alias Tev.Tw.Collector
   alias Tev.Tweet
 
+  setup do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
+    Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
+  end
+
   defp count_inserted(tweets) do
     ids = Enum.map(tweets, &Map.get(&1, :id))
     from(t in Tweet,
@@ -18,10 +23,10 @@ defmodule Tev.Tw.CollectorTest do
   end
 
   test "collector inserts photo tweets" do
-    normal_tweets = build_many(:extwitter_tweet, 3)
-    photo_tweets = build_many(:extwitter_photo_tweet, 3)
+    normal_tweets = build_list(3, :extwitter_tweet)
+    photo_tweets = build_list(3, :extwitter_photo_tweet)
     tweets = Enum.shuffle(normal_tweets ++ photo_tweets)
-    timeline = create(:home_timeline, user_id: create(:user).id)
+    timeline = insert(:home_timeline, user_id: insert(:user).id)
     :ok = GenServer.call(Collector, {:collect, timeline, tweets})
 
     assert count_inserted(normal_tweets) == 0
@@ -29,9 +34,9 @@ defmodule Tev.Tw.CollectorTest do
   end
 
   test "collector deals with duplicate photo tweets" do
-    all_tweets = build_many(:extwitter_photo_tweet, 6)
+    all_tweets = build_list(6, :extwitter_photo_tweet)
     [tweets1, overlap, tweets2] = Enum.chunk(all_tweets, 2)
-    timeline = create(:home_timeline, user_id: create(:user).id)
+    timeline = insert(:home_timeline, user_id: insert(:user).id)
     :ok = GenServer.call(Collector, {:collect, timeline, tweets1 ++ overlap})
 
     timeline = Repo.reload(timeline)
@@ -50,9 +55,9 @@ defmodule Tev.Tw.CollectorTest do
   end
 
   test "collector discards tweets if timeline has changed since fetch requested" do
-    tweets1 = build_many(:extwitter_photo_tweet, 3)
-    tweets2 = build_many(:extwitter_photo_tweet, 3)
-    timeline = create(:home_timeline, user_id: create(:user).id)
+    tweets1 = build_list(3, :extwitter_photo_tweet)
+    tweets2 = build_list(3, :extwitter_photo_tweet)
+    timeline = insert(:home_timeline, user_id: insert(:user).id)
     :ok = GenServer.call(Collector, {:collect, timeline, tweets1})
 
     # Start collector with outdated timeline.
@@ -63,12 +68,12 @@ defmodule Tev.Tw.CollectorTest do
   end
 
   test "collector updates timeline.collected_at after collecting photo tweets" do
-    timeline = create(:home_timeline, user_id: create(:user).id)
+    timeline = insert(:home_timeline, user_id: insert(:user).id)
 
     assert timeline.collected_at == nil
 
     t = Ecto.DateTime.utc
-    photo_tweets = build_many(:extwitter_photo_tweet, 3)
+    photo_tweets = build_list(3, :extwitter_photo_tweet)
     :ok = GenServer.call(Collector, {:collect, timeline, photo_tweets})
     collected_at = Repo.reload(timeline).collected_at
 
@@ -76,12 +81,12 @@ defmodule Tev.Tw.CollectorTest do
   end
 
   test "collector updates timeline.collected_at even after collecting no photo tweets" do
-    timeline = create(:home_timeline, user_id: create(:user).id)
+    timeline = insert(:home_timeline, user_id: insert(:user).id)
 
     assert timeline.collected_at == nil
 
     t = Ecto.DateTime.utc
-    normal_tweets = build_many(:extwitter_tweet, 3)
+    normal_tweets = build_list(3, :extwitter_tweet)
     :ok = GenServer.call(Collector, {:collect, timeline, normal_tweets})
     collected_at = Repo.reload(timeline).collected_at
 

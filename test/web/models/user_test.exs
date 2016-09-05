@@ -18,7 +18,7 @@ defmodule Tev.UserTest do
   end
 
   test "ensure_timelines_exist ensures timelines exist" do
-    user = factory(:extwitter_user)
+    user = build(:extwitter_user)
     refute Repo.get_by(Timeline, user_id: user.id)
 
     user

@@ -4,28 +4,21 @@ defmodule Tev.Factory do
   alias Tev.Timeline
   alias Tev.User
 
-  @spec build_many(atom, integer) :: [term]
-  def build_many(tag, n) do
-    Stream.repeatedly(fn -> build(tag) end)
-    |> Enum.take(n)
-    |> Enum.to_list
-  end
-
-  def factory(:user) do
+  def user_factory do
     %User{
       id: sequence(:user_id, &(&1)),
       screen_name: sequence(:user_screen_name, &"user_#{&1}"),
     }
   end
 
-  def factory(:home_timeline) do
+  def home_timeline_factory do
     %Timeline{
       user_id: sequence(:user_id, &(&1)),
       type: Timeline.Type.cast(:home) |> elem(1),
     }
   end
 
-  def factory(:extwitter_tweet) do
+  def extwitter_tweet_factory do
     id = sequence(:extwitter_tweet_id, &(&1))
     %ExTwitter.Model.Tweet{
       id: id,
@@ -33,11 +26,11 @@ defmodule Tev.Factory do
     }
   end
 
-  def factory(:extwitter_photo_tweet) do
+  def extwitter_photo_tweet_factory do
     %{build(:extwitter_tweet) | extended_entities: %{media: [%{type: "photo"}]}}
   end
 
-  def factory(:extwitter_user) do
+  def extwitter_user_factory do
     %ExTwitter.Model.User{
       id: sequence(:user_id, &(&1)),
       screen_name: sequence(:user_screen_name, &"user_#{&1}"),

@@ -1,8 +1,7 @@
 <%# Shows placeholder if no tweets are collected %>
-<%= cond do %>
-<% !@collected -> %>
+<%= if !@collected do %>
   <div class="placeholder"><%= gettext "Gathering photo tweets from your timeline now. Please reload the page after about half a minute." %></div>
-<% !@has_entries -> %>
+<% end %>
+<% if @collected && !@has_entries do %>
   <div class="placeholder"><%= gettext "Could not find photo tweets in your timeline. Please come back later." %></div>
-<% true -> %>
 <% end %>

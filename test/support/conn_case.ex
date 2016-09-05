@@ -32,10 +32,12 @@ defmodule Tev.ConnCase do
   end
 
   setup tags do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Tev.Repo)
+
     unless tags[:async] do
-      Ecto.Adapters.SQL.restart_test_transaction(Tev.Repo, [])
+      Ecto.Adapters.SQL.Sandbox.mode(Tev.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.conn()}
+    {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

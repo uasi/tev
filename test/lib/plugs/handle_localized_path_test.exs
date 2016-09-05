@@ -3,7 +3,7 @@ defmodule Tev.Plugs.HandleLocalizedPathTest do
 
   def get_conn_through_plug(path, supported_locales) do
     path_info = String.split(path, "/", trim: true)
-    %{Phoenix.ConnTest.conn | path_info: path_info}
+    %{Phoenix.ConnTest.build_conn | path_info: path_info}
     |> Tev.Plugs.HandleLocalizedPath.call(supported_locales: supported_locales)
   end
 

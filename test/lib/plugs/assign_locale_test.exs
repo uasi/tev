@@ -4,7 +4,7 @@ defmodule Tev.Plugs.AssignLocaleTest do
   alias Tev.Plugs.AssignLocale
 
   defp get_assigned_locale(header_value, supported_locales) do
-    Phoenix.ConnTest.conn
+    Phoenix.ConnTest.build_conn
     |> Plug.Conn.put_req_header("accept-language", header_value)
     |> AssignLocale.call(supported_locales: supported_locales)
     |> Map.from_struct

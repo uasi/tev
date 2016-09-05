@@ -9,6 +9,7 @@ Code.load_file("config_utils.exs", __DIR__)
 alias Tev.ConfigUtils, as: Utils
 
 config :tev,
+  ecto_repos: [Tev.Repo],
   max_timeline_tweets: 1000
 
 config :tev, Tev.Tw.Dispatcher,
